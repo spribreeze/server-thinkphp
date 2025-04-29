@@ -1,13 +1,12 @@
 ## 安装
 
 ~~~
-composer create-project topthink/think tp
+composer install
 ~~~
 
 启动服务
 
 ~~~
-cd tp
 php think run
 ~~~
 
