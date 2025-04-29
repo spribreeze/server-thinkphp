@@ -8,24 +8,37 @@ use app\model\Product; // 商品模型
 class Products
 {
     /**
-     * 获取商品列表（分页）
+     * 获取商品列表（分页、关键字搜索、类型筛选）
      *
      * @param Request $request
      * @return \think\Response
      */
     public function getList(Request $request)
     {
-        // 获取分页参数，默认每页显示 10 条数据
+        // 获取请求参数
         $page = $request->param('page', 1); // 当前页码
         $limit = $request->param('limit', 10); // 每页条数
+        $keyword = $request->param('keyword', ''); // 关键字搜索
+        $type = $request->param('type', ''); // 类型筛选
 
-        // 查询商品表并分页
-        $list = Product::where('status', 1) // 假设 status=1 表示有效商品
-            ->order('id', 'desc')         // 按照 id 倒序排列
-            ->paginate([
-                'list_rows' => $limit,   // 每页条数
-                'page'      => $page,    // 当前页码
-            ]);
+        // 构建查询条件
+        $query = Product::order('id', 'desc'); // 默认排序
+
+        // 如果提供了关键字，则按名称或描述模糊匹配
+        if (!empty($keyword)) {
+            $query->where('name|description', 'like', '%' . $keyword . '%');
+        }
+
+        // 如果提供了类型，则按类型精确匹配
+        if (!empty($type)) {
+            $query->where('type', '=', $type);
+        }
+
+        // 执行分页查询
+        $list = $query->paginate([
+            'list_rows' => $limit,   // 每页条数
+            'page'      => $page,    // 当前页码
+        ]);
 
         // 返回分页数据
         return json([

@@ -22,6 +22,10 @@ Route::post('auth/register', 'Auth/register');
 Route::post('auth/login', 'Auth/login');
 
 // 商品列表分页接口
-// Route::get('products/getList', 'Products/getList');
+Route::get('products/getList', 'Products/getList');
 // 商品列表分页接口（需要登录）
-Route::get('products/getList', 'Products/getList')->middleware(\app\middleware\Authenticate::class);
+// Route::get('products/getList', 'Products/getList')->middleware(\app\middleware\Authenticate::class);
+
+
+// 图片上传接口
+Route::post('upload/image', 'Upload/uploadImage');
