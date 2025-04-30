@@ -9,6 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 use think\facade\Route;
+use app\middleware\JwtAuth;
 
 // 测试接口
 Route::get('think', function () {
@@ -26,6 +27,11 @@ Route::get('products/getList', 'Products/getList');
 // 商品列表分页接口（需要登录）
 // Route::get('products/getList', 'Products/getList')->middleware(\app\middleware\Authenticate::class);
 
-
 // 图片上传接口
 Route::post('upload/image', 'Upload/uploadImage');
+
+// 收藏/取消收藏商品
+Route::post('user/favorite/toggle', 'User/toggleFavorite')->middleware(JwtAuth::class);
+
+// 获取用户收藏商品列表
+Route::get('user/favorite/list', 'User/getFavoriteList')->middleware(JwtAuth::class);
