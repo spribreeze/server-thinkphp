@@ -75,7 +75,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8000/products/getList?page=1&limit=10",
+					"raw": "http://localhost:8000/products/getList?page=1&limit=3&keyword=13&type=手机",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -92,7 +92,137 @@
 						},
 						{
 							"key": "limit",
+							"value": "3"
+						},
+						{
+							"key": "keyword",
+							"value": "13"
+						},
+						{
+							"key": "type",
+							"value": "手机"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload/image",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "image",
+							"type": "file",
+							"src": "/D:/Pictures/img/001.png"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/upload/image",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"upload",
+						"image"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/favorite/toggle",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYwMjcwNDUsImV4cCI6MTc0NjAzMDY0NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.YodyPDYSagOlxt7gMiLHdLMfEjCrsM6-Tx8PYEiBZP4",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"product_id\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user/favorite/toggle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"favorite",
+						"toggle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/favorite/list",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYwMjcwNDUsImV4cCI6MTc0NjAzMDY0NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.YodyPDYSagOlxt7gMiLHdLMfEjCrsM6-Tx8PYEiBZP4",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"product_id\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user/favorite/list?page=1&limit=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"favorite",
+						"list"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
 							"value": "10"
+						},
+						{
+							"key": "keyword",
+							"value": "手机",
+							"disabled": true
 						}
 					]
 				}
