@@ -31,8 +31,15 @@ Route::get('products/getList', 'Products/getList');
 Route::post('upload/image', 'Upload/uploadImage');
 
 // 收藏/取消收藏商品
-Route::post('user/favorite/toggle', 'User/toggleFavorite')->middleware(JwtAuth::class);
+Route::post('user/favorite/products/toggle', 'User/toggleFavorite')->middleware(JwtAuth::class);
 // 获取用户收藏商品列表
-Route::get('user/favorite/list', 'User/getFavoriteList')->middleware(JwtAuth::class);
+Route::get('user/favorite/products/list', 'User/getFavoriteList')->middleware(JwtAuth::class);
 // 判断某个商品是否已被当前用户收藏
-Route::get('user/favorite/check', 'User/isFavorited')->middleware(JwtAuth::class);
+Route::get('user/favorite/products/check', 'User/isFavorited')->middleware(JwtAuth::class);
+
+// 文章列表接口
+Route::get('articles/getList', 'Articles/getList');
+// 用户收藏或取消收藏文章接口
+Route::post('user/favorite/article/toggle', 'User/toggleArticleFavorite')->middleware(JwtAuth::class);
+// 获取用户收藏的文章列表
+Route::get('user/favorite/article/list', 'User/getFavoriteArticles')->middleware(JwtAuth::class);

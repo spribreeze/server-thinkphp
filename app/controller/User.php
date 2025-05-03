@@ -4,7 +4,9 @@ namespace app\controller;
 
 use think\Request;
 use app\model\UserFavorite;
+use app\model\UserArticleFavorite;
 use app\model\Product;
+use app\model\Article;
 
 class User
 {
@@ -45,7 +47,7 @@ class User
         }
     }
 
-    // 获取用户收藏列表
+    // 获取用户收藏商品列表
     public function getFavoriteList(Request $request)
     {
         // 获取当前登录用户ID
@@ -88,7 +90,7 @@ class User
             ]
         ]);
     }
-    // GET /user/favorite/check?product_id=10
+    // 是否已收藏
     public function isFavorited(Request $request)
     {
         $userId = $request->user['user_id'];
@@ -107,4 +109,82 @@ class User
             ]
         ]);
     }
+
+    /**
+     * 切换文章收藏状态（收藏/取消收藏）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function toggleArticleFavorite(Request $request)
+    {
+        // 获取当前登录用户ID
+        $userId = $request->user['user_id'];
+        $articleId = $request->post('article_id');
+
+        if (!$articleId) {
+            return json(['code' => 400, 'msg' => '缺少文章ID']);
+        }
+
+        // 查询是否已收藏
+        $exists = UserArticleFavorite::where([
+            ['user_id', '=', $userId],
+            ['article_id', '=', $articleId]
+        ])->find();
+
+        if ($exists) {
+            // 已收藏，执行取消收藏
+            $exists->delete();
+            return json(['code' => 200, 'msg' => '取消收藏成功']);
+        } else {
+            // 未收藏，执行收藏
+            UserArticleFavorite::create([
+                'user_id' => $userId,
+                'article_id' => $articleId
+            ]);
+            return json(['code' => 200, 'msg' => '收藏成功']);
+        }
+    }
+
+    /**
+     * 获取用户收藏的文章列表（分页）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getFavoriteArticles(Request $request)
+    {
+        // 获取当前登录用户ID
+        $userId = $request->user['user_id']; // 假设通过中间件解析了 Token 并存入了 user 字段
+
+        // 获取分页参数
+        $page = $request->get('page', 1);
+        $limit = $request->get('limit', 10);
+
+        // 查询用户的收藏文章
+        $query = Article::alias('a')
+            ->join('user_article_favorites uaf', 'a.id = uaf.article_id')
+            ->where('uaf.user_id', '=', $userId);
+
+        // 执行分页查询
+        $list = $query->field('a.*') // 只选择文章表中的字段
+            ->order('uaf.created_at', 'desc') // 按收藏时间降序排列
+            ->paginate([
+                'list_rows' => $limit,
+                'page'      => $page,
+            ]);
+
+        // 返回结果
+        return json([
+            'code' => 200,
+            'msg' => 'success',
+            'data' => [
+                'items' => $list->items(), // 当前页的数据
+                'total' => $list->total(), // 总记录数
+                'page'  => $list->currentPage(), // 当前页码
+                'limit' => $list->listRows(),    // 每页条数
+            ],
+        ]);
+    }
+
 }

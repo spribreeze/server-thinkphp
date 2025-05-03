@@ -11,4 +11,10 @@ class User extends Model
 
     // 设置主键
     protected $pk = 'id';
+
+    public function favoriteArticles()
+    {
+        return $this->belongsToMany(Article::class, 'user_article_favorites', 'article_id', 'user_id');
+    }
+
 }
