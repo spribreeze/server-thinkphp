@@ -4,7 +4,7 @@ namespace app\controller;
 
 use think\Request;
 use app\model\Article;
-
+use app\model\UserArticleFavorite;
 class Articles
 {
     /**
@@ -40,16 +40,54 @@ class Articles
             'page'      => $page,    // 当前页码
         ]);
 
-        // 返回分页数据
-        return json([
-            'code' => 200,
-            'msg'  => 'success',
-            'data' => [
-                'items' => $list->items(), // 当前页的数据
-                'total' => $list->total(), // 总记录数
-                'page'  => $list->currentPage(), // 当前页码
-                'limit' => $list->listRows(),    // 每页条数
-            ],
-        ]);
+        $items = [];
+        $userId = $request->user['user_id'] ?? null;
+        // if($userId !== null){
+            // 获取所有文章ID
+            $articleIds = array_column($list->items(), 'id');
+    
+            // 查询这些文章哪些已经被当前用户收藏
+            $favoritedArticles = [];
+            if ($userId) {
+                $favoritedArticles = UserArticleFavorite::where('user_id', $userId)
+                    ->whereIn('article_id', $articleIds)
+                    ->column('article_id');
+            }
+            
+            // 处理返回的数据，添加 is_favorited 字段
+            foreach ($list->items() as $item) {
+                $items[] = array_merge(
+                    $item->toArray(),
+                    ['is_favorited' => in_array($item->id, $favoritedArticles)]
+                );
+            }
+
+            return json([
+                'code' => 200,
+                'msg'  => 'success',
+                'data' => [
+                    'items' => $items, // 当前页的数据
+                    'total' => $list->total(), // 总记录数
+                    'page'  => $list->currentPage(), // 当前页码
+                    'limit' => $list->listRows(),    // 每页条数
+                ],
+            ]);
+
+
+        // }else{
+        //     // 返回分页数据
+        //     return json([
+        //         'code' => 200,
+        //         'msg'  => 'success',
+        //         'data' => [
+        //             'items' => $list->items(), // 当前页的数据
+        //             'total' => $list->total(), // 总记录数
+        //             'page'  => $list->currentPage(), // 当前页码
+        //             'limit' => $list->listRows(),    // 每页条数
+        //         ],
+        //     ]);
+        // }
+
+
     }
 }

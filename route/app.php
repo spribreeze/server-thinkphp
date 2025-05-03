@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 use think\facade\Route;
 use app\middleware\JwtAuth;
+use app\middleware\JwtAuthNotReturn;
 
 // 测试接口
 Route::get('think', function () {
@@ -38,7 +39,7 @@ Route::get('user/favorite/products/list', 'User/getFavoriteList')->middleware(Jw
 Route::get('user/favorite/products/check', 'User/isFavorited')->middleware(JwtAuth::class);
 
 // 文章列表接口
-Route::get('articles/getList', 'Articles/getList');
+Route::get('articles/getList', 'Articles/getList')->middleware(JwtAuthNotReturn::class);
 // 用户收藏或取消收藏文章接口
 Route::post('user/favorite/article/toggle', 'User/toggleArticleFavorite')->middleware(JwtAuth::class);
 // 获取用户收藏的文章列表
