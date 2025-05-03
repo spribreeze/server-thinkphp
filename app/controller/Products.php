@@ -22,7 +22,11 @@ class Products
         $type = $request->param('type', ''); // 类型筛选
 
         // 构建查询条件
-        $query = Product::order('id', 'desc'); // 默认排序
+        // $query = Product::order('id', 'desc'); // 默认排序
+        $query = Product::with(['images' => function($query){
+            // 可以根据需要调整子查询逻辑
+            $query->order('sort_order', 'asc'); // 按照排序顺序升序排列图片
+        }])->order('id', 'desc');
 
         // 如果提供了关键字，则按名称或描述模糊匹配
         if (!empty($keyword)) {
@@ -39,6 +43,15 @@ class Products
             'list_rows' => $limit,   // 每页条数
             'page'      => $page,    // 当前页码
         ]);
+
+        // 在返回之前处理数据
+        $items = [];
+        foreach ($list->items() as $item) {
+            $items[] = array_merge(
+                $item->toArray(),
+                ['images' => $item->images->toArray()] // 添加图片数组
+            );
+        }
 
         // 返回分页数据
         return json([
