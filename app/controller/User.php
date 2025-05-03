@@ -88,5 +88,23 @@ class User
             ]
         ]);
     }
+    // GET /user/favorite/check?product_id=10
+    public function isFavorited(Request $request)
+    {
+        $userId = $request->user['user_id'];
+        $productId = $request->get('product_id');
 
+        // 查询是否已收藏
+        $exists = UserFavorite::where([
+            ['user_id', '=', $userId],
+            ['product_id', '=', $productId]
+        ])->find();
+
+        return json([
+            'code' => 200,
+            'data' => [
+                'is_favorited' => !!$exists
+            ]
+        ]);
+    }
 }

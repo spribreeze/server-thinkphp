@@ -32,6 +32,7 @@ Route::post('upload/image', 'Upload/uploadImage');
 
 // 收藏/取消收藏商品
 Route::post('user/favorite/toggle', 'User/toggleFavorite')->middleware(JwtAuth::class);
-
 // 获取用户收藏商品列表
 Route::get('user/favorite/list', 'User/getFavoriteList')->middleware(JwtAuth::class);
+// 判断某个商品是否已被当前用户收藏
+Route::get('user/favorite/check', 'User/isFavorited')->middleware(JwtAuth::class);
