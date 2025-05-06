@@ -113,4 +113,100 @@ class Auth
             ],
         ]);
     }
+
+
+    /**
+     * 修改密码接口（需登录）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function changePassword(Request $request)
+    {
+        // 获取请求参数
+        $oldPassword = $request->post('old_password');
+        $newPassword = $request->post('new_password');
+
+        // 参数校验
+        if (empty($oldPassword) || empty($newPassword)) {
+            return json(['code' => 400, 'msg' => '旧密码和新密码不能为空']);
+        }
+
+        if (strlen($newPassword) < 6) {
+            return json(['code' => 400, 'msg' => '新密码长度不能小于6位']);
+        }
+
+        // 获取当前登录用户 ID（来自 Token 或 Session，根据你的认证方式）
+        $userId = $request->user['user_id'] ?? null;
+
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未授权，请先登录']);
+        }
+
+        // 查询用户
+        $user = User::find($userId);
+
+        if (!$user) {
+            return json(['code' => 404, 'msg' => '用户不存在']);
+        }
+
+        // 验证旧密码是否正确
+        if (!password_verify($oldPassword, $user->password)) {
+            return json(['code' => 401, 'msg' => '旧密码错误']);
+        }
+
+        // 加密新密码
+        $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+
+        // 更新密码
+        $user->password = $hashedPassword;
+
+        if ($user->save()) {
+            return json(['code' => 200, 'msg' => '密码修改成功']);
+        } else {
+            return json(['code' => 500, 'msg' => '密码修改失败，请稍后再试']);
+        }
+    }
+
+    /**
+     * 通过账号直接修改密码
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function resetPasswordByAccount(Request $request)
+    {
+        // 获取请求参数
+        $username = $request->post('username');
+        $newPassword = $request->post('new_password');
+
+        // 参数校验
+        if (empty($username) || empty($newPassword)) {
+            return json(['code' => 400, 'msg' => '用户名和新密码不能为空']);
+        }
+
+        if (strlen($newPassword) < 6) {
+            return json(['code' => 400, 'msg' => '新密码长度不能小于6位']);
+        }
+
+        // 查询用户
+        $user = User::where('username', $username)->find();
+
+        if (!$user) {
+            return json(['code' => 404, 'msg' => '用户不存在']);
+        }
+
+        // 加密新密码
+        $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+
+        // 更新密码
+        $user->password = $hashedPassword;
+
+        if ($user->save()) {
+            return json(['code' => 200, 'msg' => '密码重置成功']);
+        } else {
+            return json(['code' => 500, 'msg' => '密码重置失败，请稍后再试']);
+        }
+    }
+
 }

@@ -22,7 +22,10 @@ Route::get('hello/:name', 'index/hello');
 Route::post('auth/register', 'Auth/register');
 // 用户登录接口
 Route::post('auth/login', 'Auth/login');
-
+// 修改密码接口（需登录）
+Route::post('auth/changePassword', 'Auth/changePassword')->middleware(JwtAuthNotReturn::class);
+// 修改密码接口（无需登录）
+Route::post('auth/resetPasswordByAccount', 'Auth/resetPasswordByAccount');
 // 商品列表分页接口
 Route::get('products/getList', 'Products/getList');
 // 商品列表分页接口（需要登录）
