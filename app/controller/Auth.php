@@ -104,12 +104,13 @@ class Auth
 
         $token = JWT::encode($payload, $key, 'HS256');
 
-        // 返回登录成功响应
+        // 返回登录成功响应，包含 token 和用户完整信息
         return json([
             'code' => 200,
             'msg'  => '登录成功',
             'data' => [
                 'token' => $token,
+                'user' => $user->hidden(['password'])->toArray(), // 将用户模型转为数组，返回全部字段
             ],
         ]);
     }
