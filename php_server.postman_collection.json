@@ -70,12 +70,12 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDU4OTA2MTMsImV4cCI6MTc0NTg5NDIxMywiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.xPN07sDDOW9mytmHCL5Tzo7rCxp5_Rva6_sPNGTYHUE",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNTMwNDgsImV4cCI6MTc0NjI1NjY0OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.JBaehmZrXu_O3rqe8tNRDV9F7JkUvcog5zJKdGyJ6ms",
 						"type": "default"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8000/products/getList?page=1&limit=3&keyword=13&type=手机",
+					"raw": "http://localhost:8000/products/getList?page=1&limit=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -92,15 +92,17 @@
 						},
 						{
 							"key": "limit",
-							"value": "3"
+							"value": "10"
 						},
 						{
 							"key": "keyword",
-							"value": "13"
+							"value": "13",
+							"disabled": true
 						},
 						{
 							"key": "type",
-							"value": "手机"
+							"value": "手机",
+							"disabled": true
 						}
 					]
 				}
@@ -143,13 +145,13 @@
 			"response": []
 		},
 		{
-			"name": "user/favorite/toggle",
+			"name": "user/favorite/products/toggle",
 			"request": {
 				"method": "POST",
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYwMjcwNDUsImV4cCI6MTc0NjAzMDY0NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.YodyPDYSagOlxt7gMiLHdLMfEjCrsM6-Tx8PYEiBZP4",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNzkyNTUsImV4cCI6MTc0NjI4Mjg1NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.DvzSbhyOOUZA4_m0_PXHWKpi5ZPcjfL_rJuDTBVt4m0",
 						"type": "default"
 					}
 				],
@@ -163,7 +165,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/user/favorite/toggle",
+					"raw": "http://localhost:8000/user/favorite/products/toggle",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -172,6 +174,7 @@
 					"path": [
 						"user",
 						"favorite",
+						"products",
 						"toggle"
 					]
 				}
@@ -179,13 +182,16 @@
 			"response": []
 		},
 		{
-			"name": "user/favorite/list",
+			"name": "user/favorite/products/list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYwMjcwNDUsImV4cCI6MTc0NjAzMDY0NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.YodyPDYSagOlxt7gMiLHdLMfEjCrsM6-Tx8PYEiBZP4",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNTMwNDgsImV4cCI6MTc0NjI1NjY0OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.JBaehmZrXu_O3rqe8tNRDV9F7JkUvcog5zJKdGyJ6ms",
 						"type": "default"
 					}
 				],
@@ -199,7 +205,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/user/favorite/list?page=1&limit=10",
+					"raw": "http://localhost:8000/user/favorite/products/list?page=1&limit=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -208,6 +214,191 @@
 					"path": [
 						"user",
 						"favorite",
+						"products",
+						"list"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "keyword",
+							"value": "手机",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/favorite/products/check",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNTMwNDgsImV4cCI6MTc0NjI1NjY0OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.JBaehmZrXu_O3rqe8tNRDV9F7JkUvcog5zJKdGyJ6ms",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user/favorite/products/check?product_id=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"favorite",
+						"products",
+						"check"
+					],
+					"query": [
+						{
+							"key": "product_id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "articles/getList",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNzkyNTUsImV4cCI6MTc0NjI4Mjg1NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.DvzSbhyOOUZA4_m0_PXHWKpi5ZPcjfL_rJuDTBVt4m0",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/articles/getList?page=1&limit=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"articles",
+						"getList"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "keyword",
+							"value": "三星",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "活动",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/favorite/article/toggle",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNjY2MjAsImV4cCI6MTc0NjI3MDIyMCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.vt9Wd-Z1PcWJY0ek-c1rMRuCr1JbP3fK1las_6zL_KU",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"article_id\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user/favorite/article/toggle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"favorite",
+						"article",
+						"toggle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/favorite/article/list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNzkyNTUsImV4cCI6MTc0NjI4Mjg1NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.DvzSbhyOOUZA4_m0_PXHWKpi5ZPcjfL_rJuDTBVt4m0",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user/favorite/article/list?page=1&limit=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"favorite",
+						"article",
 						"list"
 					],
 					"query": [
