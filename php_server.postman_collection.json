@@ -140,7 +140,7 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1ODczMDQsImV4cCI6MTc0NjU5MDkwNCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.Md8s4FzqFIfmrrrYtBacPQjde58dL4Iyxa2jJZFnXqg",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTE5OTMsImV4cCI6MTc0NjU5NTU5MywiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.5hWQmDkcvkGMNo7BxMuJfCD_1yPSFl7jkxcnoi5GigQ",
 						"type": "default"
 					}
 				],
@@ -359,7 +359,7 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNzkyNTUsImV4cCI6MTc0NjI4Mjg1NSwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.DvzSbhyOOUZA4_m0_PXHWKpi5ZPcjfL_rJuDTBVt4m0",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTE5OTMsImV4cCI6MTc0NjU5NTU5MywiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.5hWQmDkcvkGMNo7BxMuJfCD_1yPSFl7jkxcnoi5GigQ",
 						"type": "default"
 					}
 				],
@@ -485,6 +485,41 @@
 							"value": "手机",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/updateProfile 更新用户信息",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTg1NTgsImV4cCI6MTc0NjYwMjE1OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.-HlqlnnXkEcDwkCnmM-_jwoofEvVA_3M472CyMXipM8",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"nickname\": \"\",\r\n  \"userCol01\": \"value11\",\r\n  \"userCol02\": \"value22\",\r\n  \"userCol03\": \"3\",\r\n  \"userCol04\": \"4\",\r\n  \"userCol05\": \"5\",\r\n  \"userCol06\": \"6\",\r\n  \"userCol07\": \"6\",\r\n   \"userCol08\": \"6\",\r\n   \"userCol09\": \"6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user/updateProfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"updateProfile"
 					]
 				}
 			},

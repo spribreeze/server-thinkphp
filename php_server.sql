@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 06/05/2025 22:16:16
+ Date: 07/05/2025 14:45:16
 */
 
 SET NAMES utf8mb4;
@@ -135,6 +135,16 @@ CREATE TABLE `users`  (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '邮箱（可选）',
   `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手机号（可选）',
   `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `userCol01` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol02` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol03` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol04` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol05` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol06` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol07` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol08` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `userCol09` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
@@ -142,8 +152,8 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'testuser01', '$2y$10$FAzzWCF6xk58fmAYT9bztOrxZ/EakaboY4dxJS9X4RgV3lV51v9Yu', NULL, NULL, '2025-04-28 22:25:39');
-INSERT INTO `users` VALUES (2, 'testuser02', '$2y$10$ip6cMH2TjhIm3vXnAO9GjOv5mRb9GdfcHy.WBWfEB1JPkogefY.au', NULL, NULL, '2025-04-28 22:28:46');
-INSERT INTO `users` VALUES (3, 'testuser03', '$2y$10$mHy1QBoveZtxjy6QgNId3egbxbCjQbq4iBOzso/3PnMiIAELL6Z3C', NULL, NULL, '2025-04-28 22:29:39');
+INSERT INTO `users` VALUES (1, 'testuser01', '$2y$10$wYVXkmeJ.L86JSvT96VNr.mGjtJWQaNwyJIYcUWJDTiCB2gIb3tN6', '', '', '2025-04-28 22:25:39', 'value11', 'value22', '3', '4', '5', '6', '6', '6', '6', '昵称11');
+INSERT INTO `users` VALUES (2, 'testuser02', '$2y$10$ip6cMH2TjhIm3vXnAO9GjOv5mRb9GdfcHy.WBWfEB1JPkogefY.au', NULL, NULL, '2025-04-28 22:28:46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (3, 'testuser03', '$2y$10$mHy1QBoveZtxjy6QgNId3egbxbCjQbq4iBOzso/3PnMiIAELL6Z3C', NULL, NULL, '2025-04-28 22:29:39', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
