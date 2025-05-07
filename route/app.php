@@ -35,6 +35,8 @@ Route::get('products/getList', 'Products/getList')->middleware(JwtAuthNotReturn:
 Route::get('articles/getList', 'Articles/getList')->middleware(JwtAuthNotReturn::class);
 // 图片上传接口
 Route::post('upload/image', 'Upload/uploadImage');
+// 获取公告列表
+Route::post('notice/getList', 'Notice/getList');
 
 // 收藏/取消收藏商品
 Route::post('user/favorite/products/toggle', 'User/toggleFavorite')->middleware(JwtAuth::class);
