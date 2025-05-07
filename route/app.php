@@ -22,15 +22,17 @@ Route::get('hello/:name', 'index/hello');
 Route::post('auth/register', 'Auth/register');
 // 用户登录接口
 Route::post('auth/login', 'Auth/login');
+// 更新用户信息
+Route::post('user/updateProfile', 'User/updateProfile')->middleware(JwtAuth::class);
 // 修改密码接口（需登录）
 Route::post('auth/changePassword', 'Auth/changePassword')->middleware(JwtAuthNotReturn::class);
 // 修改密码接口（无需登录）
 Route::post('auth/resetPasswordByAccount', 'Auth/resetPasswordByAccount');
+
 // 商品列表分页接口
 Route::get('products/getList', 'Products/getList')->middleware(JwtAuthNotReturn::class);
-// 商品列表分页接口（需要登录）
-// Route::get('products/getList', 'Products/getList')->middleware(\app\middleware\Authenticate::class);
-
+// 文章列表接口
+Route::get('articles/getList', 'Articles/getList')->middleware(JwtAuthNotReturn::class);
 // 图片上传接口
 Route::post('upload/image', 'Upload/uploadImage');
 
@@ -40,9 +42,6 @@ Route::post('user/favorite/products/toggle', 'User/toggleFavorite')->middleware(
 Route::get('user/favorite/products/list', 'User/getFavoriteList')->middleware(JwtAuth::class);
 // 判断某个商品是否已被当前用户收藏
 Route::get('user/favorite/products/check', 'User/isFavorited')->middleware(JwtAuth::class);
-
-// 文章列表接口
-Route::get('articles/getList', 'Articles/getList')->middleware(JwtAuthNotReturn::class);
 // 用户收藏或取消收藏文章接口
 Route::post('user/favorite/article/toggle', 'User/toggleArticleFavorite')->middleware(JwtAuth::class);
 // 获取用户收藏的文章列表

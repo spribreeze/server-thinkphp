@@ -7,6 +7,7 @@ use app\model\UserFavorite;
 use app\model\UserArticleFavorite;
 use app\model\Product;
 use app\model\Article;
+use app\model\User as UserModel;
 
 class User
 {
@@ -185,6 +186,104 @@ class User
                 'limit' => $list->listRows(),    // 每页条数
             ],
         ]);
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function updateProfile(Request $request)
+    {
+        // 获取当前登录用户ID（这里假设你已经通过某种方式获取到了当前用户的信息）
+        $userId = $request->user['user_id'] ?? null;
+
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未授权，请先登录']);
+        }
+
+        // 查询当前用户
+        $user = UserModel::find($userId);
+
+        if (!$user) {
+            return json(['code' => 404, 'msg' => '用户不存在']);
+        }
+
+        // 获取请求参数并仅在非空时更新
+        $updates = [];
+
+        $nickname = $request->post('nickname', '');
+        if (!empty($nickname)) {
+            $updates['nickname'] = $nickname;
+        }
+
+        $email = $request->post('email', '');
+        if (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $updates['email'] = $email;
+        } elseif (!empty($email)) {
+            return json(['code' => 400, 'msg' => '邮箱格式不正确']);
+        }
+
+        $phone = $request->post('phone', '');
+        if (!empty($phone)) {
+            $updates['phone'] = $phone;
+        }
+
+        $userCol01 = $request->post('userCol01', '');
+        if (!empty($userCol01)) {
+            $updates['userCol01'] = $userCol01;
+        }
+
+        $userCol02 = $request->post('userCol02', '');
+        if (!empty($userCol02)) {
+            $updates['userCol02'] = $userCol02;
+        }
+        $userCol03 = $request->post('userCol03', '');
+        if (!empty($userCol03)) {
+            $updates['userCol03'] = $userCol03;
+        }
+        $userCol04 = $request->post('userCol04', '');
+        if (!empty($userCol04)) {
+            $updates['userCol04'] = $userCol04;
+        }
+        $userCol05 = $request->post('userCol05', '');
+        if (!empty($userCol05)) {
+            $updates['userCol05'] = $userCol05;
+        }
+        $userCol06 = $request->post('userCol06', '');
+        if (!empty($userCol06)) {
+            $updates['userCol06'] = $userCol06;
+        }
+        $userCol07 = $request->post('userCol07', '');
+        if (!empty($userCol07)) {
+            $updates['userCol07'] = $userCol07;
+        }
+        $userCol08 = $request->post('userCol08', '');
+        if (!empty($userCol08)) {
+            $updates['userCol08'] = $userCol08;
+        }
+        $userCol09 = $request->post('userCol09', '');
+        if (!empty($userCol09)) {
+            $updates['userCol09'] = $userCol09;
+        }
+
+        // 如果没有需要更新的字段
+        if (empty($updates)) {
+            return json(['code' => 400, 'msg' => '没有有效的更新数据']);
+        }
+
+        if ($user->save($updates)) {
+            return json([
+                'code' => 200,
+                'msg'  => '更新成功',
+                'data' => [
+                    'user' => $user->hidden(['password'])->toArray(), // 将用户模型转为数组，返回全部字段
+                ]
+            ]);
+        } else {
+            return json(['code' => 500, 'msg' => '更新失败，请稍后再试']);
+        }
     }
 
 }
