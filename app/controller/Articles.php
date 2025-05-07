@@ -42,52 +42,49 @@ class Articles
 
         $items = [];
         $userId = $request->user['user_id'] ?? null;
-        // if($userId !== null){
-            // 获取所有文章ID
-            $articleIds = array_column($list->items(), 'id');
+        // 获取所有文章ID
+        $articleIds = array_column($list->items(), 'id');
+
+        // 查询这些文章哪些已经被当前用户收藏
+        $favoritedArticles = [];
+        if ($userId) {
+            $favoritedArticles = UserArticleFavorite::where('user_id', $userId)
+                ->whereIn('article_id', $articleIds)
+                ->column('article_id');
+        }
+        
+        // 查询每个商品的点赞数
+        $favoriteCounts = UserArticleFavorite::whereIn('article_id', $articleIds)
+            ->group('article_id')
+            ->field('article_id, count(*) as favorite_count')
+            ->select()
+            ->toArray();
     
-            // 查询这些文章哪些已经被当前用户收藏
-            $favoritedArticles = [];
-            if ($userId) {
-                $favoritedArticles = UserArticleFavorite::where('user_id', $userId)
-                    ->whereIn('article_id', $articleIds)
-                    ->column('article_id');
-            }
-            
-            // 处理返回的数据，添加 is_favorited 字段
-            foreach ($list->items() as $item) {
-                $items[] = array_merge(
-                    $item->toArray(),
-                    ['is_favorited' => in_array($item->id, $favoritedArticles)]
-                );
-            }
+        // 将点赞数转换为关联数组，方便查找
+        $favoriteCountMap = [];
+        foreach ($favoriteCounts as $item) {
+            $favoriteCountMap[$item['article_id']] = $item['favorite_count'];
+        }
 
-            return json([
-                'code' => 200,
-                'msg'  => 'success',
-                'data' => [
-                    'items' => $items, // 当前页的数据
-                    'total' => $list->total(), // 总记录数
-                    'page'  => $list->currentPage(), // 当前页码
-                    'limit' => $list->listRows(),    // 每页条数
-                ],
-            ]);
+        // 处理返回的数据，添加 is_favorited 字段
+        foreach ($list->items() as $item) {
+            $items[] = array_merge(
+                $item->toArray(),
+                ['favorite_count' => $favoriteCountMap[$item->id] ?? 0], // 默认点赞数为0
+                ['is_favorited' => in_array($item->id, $favoritedArticles)]
+            );
+        }
 
-
-        // }else{
-        //     // 返回分页数据
-        //     return json([
-        //         'code' => 200,
-        //         'msg'  => 'success',
-        //         'data' => [
-        //             'items' => $list->items(), // 当前页的数据
-        //             'total' => $list->total(), // 总记录数
-        //             'page'  => $list->currentPage(), // 当前页码
-        //             'limit' => $list->listRows(),    // 每页条数
-        //         ],
-        //     ]);
-        // }
-
+        return json([
+            'code' => 200,
+            'msg'  => 'success',
+            'data' => [
+                'items' => $items, // 当前页的数据
+                'total' => $list->total(), // 总记录数
+                'page'  => $list->currentPage(), // 当前页码
+                'limit' => $list->listRows(),    // 每页条数
+            ],
+        ]);
 
     }
 }
