@@ -27,7 +27,7 @@ Route::post('auth/changePassword', 'Auth/changePassword')->middleware(JwtAuthNot
 // 修改密码接口（无需登录）
 Route::post('auth/resetPasswordByAccount', 'Auth/resetPasswordByAccount');
 // 商品列表分页接口
-Route::get('products/getList', 'Products/getList');
+Route::get('products/getList', 'Products/getList')->middleware(JwtAuthNotReturn::class);
 // 商品列表分页接口（需要登录）
 // Route::get('products/getList', 'Products/getList')->middleware(\app\middleware\Authenticate::class);
 

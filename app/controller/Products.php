@@ -4,6 +4,7 @@ namespace app\controller;
 
 use think\Request;
 use app\model\Product; // 商品模型
+use app\model\UserFavorite;
 
 class Products
 {
@@ -43,26 +44,39 @@ class Products
             'list_rows' => $limit,   // 每页条数
             'page'      => $page,    // 当前页码
         ]);
-
-        // 在返回之前处理数据
         $items = [];
-        foreach ($list->items() as $item) {
-            $items[] = array_merge(
-                $item->toArray(),
-                ['images' => $item->images->toArray()] // 添加图片数组
-            );
-        }
+        $userId = $request->user['user_id'] ?? null;
+        // if($userId !== null){
+            // 获取所有文章ID
+            $productIds = array_column($list->items(), 'id');
+    
+            // 查询这些商品哪些已经被当前用户收藏
+            $favoritedArticles = [];
+            if ($userId) {
+                $favoritedArticles = UserFavorite::where('user_id', $userId)
+                    ->whereIn('product_id', $productIds)
+                    ->column('product_id');
+            }
+            
+            // 处理返回的数据，添加 is_favorited 字段
+            foreach ($list->items() as $item) {
+                $items[] = array_merge(
+                    $item->toArray(),
+                    ['is_favorited' => in_array($item->id, $favoritedArticles)],
+                    ['images' => $item->images->toArray()] // 添加图片数组
+                );
+            }
 
-        // 返回分页数据
-        return json([
-            'code' => 200,
-            'msg'  => 'success',
-            'data' => [
-                'items' => $list->items(), // 当前页的数据
-                'total' => $list->total(), // 总记录数
-                'page'  => $list->currentPage(), // 当前页码
-                'limit' => $list->listRows(),    // 每页条数
-            ],
-        ]);
+            return json([
+                'code' => 200,
+                'msg'  => 'success',
+                'data' => [
+                    'items' => $items, // 当前页的数据
+                    'total' => $list->total(), // 总记录数
+                    'page'  => $list->currentPage(), // 当前页码
+                    'limit' => $list->listRows(),    // 每页条数
+                ],
+            ]);
+
     }
 }
