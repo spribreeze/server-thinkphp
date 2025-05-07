@@ -36,7 +36,7 @@ class JwtAuthNotReturn
             ];
 
         } catch (\Exception $e) {
-            return Response::create(['code' => 401, 'msg' => '无效的 Token'], 'json')->code(401);
+            // return Response::create(['code' => 401, 'msg' => '无效的 Token'], 'json')->code(401);
         }
 
         return $next($request);
