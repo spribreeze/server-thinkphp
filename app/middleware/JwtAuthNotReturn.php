@@ -20,7 +20,7 @@ class JwtAuthNotReturn
         	return $next($request);
         }
 
-        // try {
+        try {
             $token = str_replace('Bearer ', '', $token);
             $decoded = JWT::decode($token, new Key($this->jwtKey, 'HS256'));
 
@@ -35,9 +35,9 @@ class JwtAuthNotReturn
                 // 其他字段也可以添加进来
             ];
 
-        // } catch (\Exception $e) {
-        //     return Response::create(['code' => 401, 'msg' => '无效的 Token'], 'json')->code(401);
-        // }
+        } catch (\Exception $e) {
+            return Response::create(['code' => 401, 'msg' => '无效的 Token'], 'json')->code(401);
+        }
 
         return $next($request);
     }
