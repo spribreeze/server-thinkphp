@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"testuser01\",\r\n    \"password\": \"123456\"\r\n}",
+					"raw": "{\r\n    \"username\": \"testuser01\",\r\n    \"password\": \"newpassword12345\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -64,13 +64,83 @@
 			"response": []
 		},
 		{
-			"name": "products/getList",
+			"name": "auth/changePassword 修改密码接口（需登录）",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1NDg3MTMsImV4cCI6MTc0NjU1MjMxMywiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.iGEsJittk8VdFCGdatBJsFRPvEpSInTMfl4lYm1LYMg",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"old_password\": \"newpassword123\",\r\n  \"new_password\": \"newpassword1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/auth/changePassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"auth",
+						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth/resetPasswordByAccount 修改密码接口（无需登录）",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1NDg3MTMsImV4cCI6MTc0NjU1MjMxMywiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.iGEsJittk8VdFCGdatBJsFRPvEpSInTMfl4lYm1LYMg",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"testuser01\",\r\n  \"new_password\": \"newpassword12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/auth/resetPasswordByAccount",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"auth",
+						"resetPasswordByAccount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products/getList 商品列表分页接口",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDYyNTMwNDgsImV4cCI6MTc0NjI1NjY0OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.JBaehmZrXu_O3rqe8tNRDV9F7JkUvcog5zJKdGyJ6ms",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1ODczMDQsImV4cCI6MTc0NjU5MDkwNCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.Md8s4FzqFIfmrrrYtBacPQjde58dL4Iyxa2jJZFnXqg",
 						"type": "default"
 					}
 				],
@@ -145,7 +215,7 @@
 			"response": []
 		},
 		{
-			"name": "user/favorite/products/toggle",
+			"name": "user/favorite/products/toggle 收藏/取消收藏商品",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -182,7 +252,7 @@
 			"response": []
 		},
 		{
-			"name": "user/favorite/products/list",
+			"name": "user/favorite/products/list 获取用户收藏商品列表",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -237,7 +307,7 @@
 			"response": []
 		},
 		{
-			"name": "user/favorite/products/check",
+			"name": "user/favorite/products/check 判断某个商品是否已被当前用户收藏",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -283,7 +353,7 @@
 			"response": []
 		},
 		{
-			"name": "articles/getList",
+			"name": "articles/getList 文章列表接口",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -329,7 +399,7 @@
 			"response": []
 		},
 		{
-			"name": "user/favorite/article/toggle",
+			"name": "user/favorite/article/toggle 用户收藏或取消收藏文章接口",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -366,7 +436,7 @@
 			"response": []
 		},
 		{
-			"name": "user/favorite/article/list",
+			"name": "user/favorite/article/list 获取用户收藏的文章列表",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
