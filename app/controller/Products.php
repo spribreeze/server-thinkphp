@@ -5,6 +5,7 @@ namespace app\controller;
 use think\Request;
 use app\model\Product; // 商品模型
 use app\model\UserFavorite;
+use app\model\ProductComment;
 
 class Products
 {
@@ -92,4 +93,48 @@ class Products
             ],
         ]);
     }
+
+    // 添加商品评论
+    public function addComment(Request $request)
+    {
+        $data = $request->post();
+        $comment = new ProductComment();
+
+        $userId = $request->user['user_id'] ?? null;
+
+        if ($userId) {
+            $result = $comment->save([
+                'product_id' => $data['product_id'],
+                'user_id' => $userId,
+                'content' => $data['content']
+            ]);
+    
+            if ($result) {
+                return json(['status' => 'success', 'message' => '评论成功']);
+            } else {
+                return json(['status' => 'error', 'message' => '评论失败'], 500);
+            }
+        }else{
+            return json(['status' => 'error', 'message' => '获取商品id失败'], 500);
+        }
+
+    }
+
+    // 获取商品的所有评论
+    public function getCommentsByProductId(Request $request)
+    {
+        $productId = $request->param('productId', 0);
+
+        $comments = ProductComment::with('user') // 自动带上用户信息（不包括密码）
+            ->where('product_id', '=', $productId)
+            ->order('created_at', 'desc')
+            ->select();
+
+        if ($comments) {
+            return json(['status' => 'success', 'data' => $comments]);
+        } else {
+            return json(['status' => 'error', 'message' => '暂无评论'], 404);
+        }
+    }
+
 }

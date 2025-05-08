@@ -31,9 +31,13 @@ Route::post('auth/resetPasswordByAccount', 'Auth/resetPasswordByAccount');
 
 // 商品列表分页接口
 Route::get('products/getList', 'Products/getList')->middleware(JwtAuthNotReturn::class);
+// 商品评论
+Route::post('products/addComment', 'products/addComment')->middleware(JwtAuth::class);
+// 获取商品评论
+Route::get('products/getComments', 'products/getCommentsByProductId');
 // 文章列表接口
 Route::get('articles/getList', 'Articles/getList')->middleware(JwtAuthNotReturn::class);
-// 评论文章
+// 文章评论
 Route::post('articles/addComment', 'articles/addComment')->middleware(JwtAuth::class);
 // 获取文章评论
 Route::get('articles/getComments', 'articles/getCommentsByArticleId');

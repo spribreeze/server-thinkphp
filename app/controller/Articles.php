@@ -118,10 +118,11 @@ class Articles
     //  获取文章评论
     public function getCommentsByArticleId(Request $request)
     {
-        $articleId = $request->param('articleId', 0); // 当前页码
+        $articleId = $request->param('articleId', 0);
 
         $comments = ArticlesComments::with('user') // 使用with预加载用户数据
             ->where('article_id', '=', $articleId)
+            ->order('created_at', 'desc')
             ->select();
 
         if ($comments) {
