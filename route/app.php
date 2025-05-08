@@ -33,6 +33,11 @@ Route::post('auth/resetPasswordByAccount', 'Auth/resetPasswordByAccount');
 Route::get('products/getList', 'Products/getList')->middleware(JwtAuthNotReturn::class);
 // 文章列表接口
 Route::get('articles/getList', 'Articles/getList')->middleware(JwtAuthNotReturn::class);
+// 评论文章
+Route::post('articles/addComment', 'articles/addComment')->middleware(JwtAuth::class);
+// 获取文章评论
+Route::get('articles/getComments', 'articles/getCommentsByArticleId');
+
 // 图片上传接口
 Route::post('upload/image', 'Upload/uploadImage');
 // 获取公告列表
