@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : mysql_task01
+ Source Server         : root
  Source Server Type    : MySQL
  Source Server Version : 50724
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 07/05/2025 14:45:16
+ Date: 09/05/2025 22:12:05
 */
 
 SET NAMES utf8mb4;
@@ -35,6 +35,95 @@ CREATE TABLE `articles`  (
 -- ----------------------------
 INSERT INTO `articles` VALUES (1, '三星堆博物馆开展香港青少年“云游学•四川行” 直播导览活动', '<p><span style=\"background-color: rgb(245, 219, 77);\"><strong>hello world</strong></span></p><p><br></p>', '活动', '2025-05-03 17:37:30');
 INSERT INTO `articles` VALUES (2, '青春“动”起来，文物“活”起来——三星堆博物馆开展“古蜀文明进校园”研学活动', '<p><br></p><p style=\"text-indent: 2em; text-align: left;\">金色九月，秋高气爽，丹桂飘香。在这个收获的季节里，9月25日，三星堆博物馆社教人员来到广汉市金鱼镇第二小学，开展了一次独具特色的古蜀文明研学活动，与学校的100余名师生一起感受新时代三星堆古老文明绽放出来的青春与活力。</p><p style=\"text-indent: 2em; text-align: left;\">“古蜀勇士”趣味运动：让青春“动起来”</p><p style=\"text-indent: 2em; text-align: left;\">25日下午2：30分，在学校的操场上，一场趣味十足的“古蜀勇士”争夺赛拉开了本次活动的序幕。身穿不同颜色队服的50名同学分成5组展开了激烈的比拼。</p><p style=\"text-indent: 2em; text-align: left;\">从体现团队配合和协作能力的第一关“顺流而下”，到比拼体力和耐力的第二关“蜀王快跑”，再到考验身体协调能力和形象思维能力的第三关“蜀宝拼拼乐”，每一次闯关比赛看似简单，却要求每一名参赛的队员必须与队友通力合作和密切配合才能顺利过关。虽然只有简单的三关比赛，但对只有10岁左右的孩子们来说，在体力、智力、协调能力、合作精神等方面确是不小的考验</p><p><br></p>', '活动', '2025-05-03 21:32:37');
+
+-- ----------------------------
+-- Table structure for articles_comments
+-- ----------------------------
+DROP TABLE IF EXISTS `articles_comments`;
+CREATE TABLE `articles_comments`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) NOT NULL COMMENT '关联的文章ID',
+  `user_id` int(11) NOT NULL COMMENT '评论用户的ID',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '评论时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `article_id`(`article_id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE,
+  CONSTRAINT `articles_comments_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `articles_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of articles_comments
+-- ----------------------------
+INSERT INTO `articles_comments` VALUES (1, 1, 1, '这是一条评论', '2025-05-08 10:48:18');
+INSERT INTO `articles_comments` VALUES (2, 1, 1, '这是一条评论', '2025-05-08 10:56:32');
+INSERT INTO `articles_comments` VALUES (3, 1, 1, '这是一条评论3', '2025-05-08 10:56:54');
+
+-- ----------------------------
+-- Table structure for notice
+-- ----------------------------
+DROP TABLE IF EXISTS `notice`;
+CREATE TABLE `notice`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '公告ID',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '公告标题',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '公告内容',
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '公告类型（例如：通知、新闻等）',
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `updated_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_type`(`type`) USING BTREE COMMENT '索引: 类型'
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公告表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of notice
+-- ----------------------------
+INSERT INTO `notice` VALUES (1, '重要系统维护通知', '我们将于本周五凌晨进行系统维护...', '通知', '2025-05-08 00:19:24', '2025-05-08 00:19:24');
+INSERT INTO `notice` VALUES (2, '新产品发布会', '欢迎参加我们的新产品发布会...', '新闻', '2025-05-08 00:19:24', '2025-05-08 00:19:24');
+
+-- ----------------------------
+-- Table structure for post
+-- ----------------------------
+DROP TABLE IF EXISTS `post`;
+CREATE TABLE `post`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '帖子ID',
+  `user_id` int(10) UNSIGNED NOT NULL COMMENT '用户ID',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '帖子标题',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '帖子内容',
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '帖子类型（如：问答、分享、公告等）',
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+  `updated_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_user_id`(`user_id`) USING BTREE,
+  INDEX `idx_type`(`type`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '帖子表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of post
+-- ----------------------------
+INSERT INTO `post` VALUES (1, 1, '如何学好ThinkPHP？', '我刚开始学习TP框架，请大家给点建议。', '问答', '2025-05-09 22:00:41', '2025-05-09 22:00:41');
+
+-- ----------------------------
+-- Table structure for product_comments
+-- ----------------------------
+DROP TABLE IF EXISTS `product_comments`;
+CREATE TABLE `product_comments`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL COMMENT '关联的商品ID',
+  `user_id` int(11) NOT NULL COMMENT '评论用户的ID',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '评论时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `product_id`(`product_id`) USING BTREE,
+  INDEX `user_id`(`user_id`) USING BTREE,
+  CONSTRAINT `product_comments_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `product_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of product_comments
+-- ----------------------------
+INSERT INTO `product_comments` VALUES (1, 1, 1, '这是一条评论1', '2025-05-08 14:26:01');
 
 -- ----------------------------
 -- Table structure for product_images
@@ -152,8 +241,8 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, 'testuser01', '$2y$10$wYVXkmeJ.L86JSvT96VNr.mGjtJWQaNwyJIYcUWJDTiCB2gIb3tN6', '', '', '2025-04-28 22:25:39', 'value11', 'value22', '3', '4', '5', '6', '6', '6', '6', '昵称11');
-INSERT INTO `users` VALUES (2, 'testuser02', '$2y$10$ip6cMH2TjhIm3vXnAO9GjOv5mRb9GdfcHy.WBWfEB1JPkogefY.au', NULL, NULL, '2025-04-28 22:28:46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `users` VALUES (3, 'testuser03', '$2y$10$mHy1QBoveZtxjy6QgNId3egbxbCjQbq4iBOzso/3PnMiIAELL6Z3C', NULL, NULL, '2025-04-28 22:29:39', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (1, 'testuser01', '$2y$10$wYVXkmeJ.L86JSvT96VNr.mGjtJWQaNwyJIYcUWJDTiCB2gIb3tN6', '', '', '2025-04-28 22:25:39', 'imgUrl', 'value22', '3', '4', '5', '6', '6', '6', '6', '昵称11');
+INSERT INTO `users` VALUES (2, 'testuser02', '$2y$10$ip6cMH2TjhIm3vXnAO9GjOv5mRb9GdfcHy.WBWfEB1JPkogefY.au', NULL, NULL, '2025-04-28 22:28:46', 'imgUrl', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (3, 'testuser03', '$2y$10$mHy1QBoveZtxjy6QgNId3egbxbCjQbq4iBOzso/3PnMiIAELL6Z3C', NULL, NULL, '2025-04-28 22:29:39', 'imgUrl', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

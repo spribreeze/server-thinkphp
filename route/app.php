@@ -13,6 +13,9 @@ use app\middleware\JwtAuth;
 use app\middleware\JwtAuthNotReturn;
 
 // 测试接口
+Route::get('/', function () {
+    return 'hello,ThinkPHP8!';
+});
 Route::get('think', function () {
     return 'hello,ThinkPHP8!';
 });
@@ -57,3 +60,8 @@ Route::get('user/favorite/products/check', 'User/isFavorited')->middleware(JwtAu
 Route::post('user/favorite/article/toggle', 'User/toggleArticleFavorite')->middleware(JwtAuth::class);
 // 获取用户收藏的文章列表
 Route::get('user/favorite/article/list', 'User/getFavoriteArticles')->middleware(JwtAuth::class);
+
+// 发布帖子
+Route::post('post/create', 'Post/createPost')->middleware(JwtAuth::class);
+// 获取帖子列表
+Route::get('post/list', 'Post/getPostList');

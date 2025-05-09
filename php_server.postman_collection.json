@@ -180,6 +180,148 @@
 			"response": []
 		},
 		{
+			"name": "products/addComment 商品评论",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY2ODU1NTAsImV4cCI6MTc0NjY4OTE1MCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.CW7Bg2s3gMlVdQgWA-vfapO8ZfGb-nlHvZ12D8issl8",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"product_id\": 1, \"content\": \"这是一条评论1\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/addComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"addComment"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "三星",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "活动",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products/getComments 获取商品评论",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY2NzI0MDYsImV4cCI6MTc0NjY3NjAwNiwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.GJvGRjzYz4Jhd_0XQNxD7WIR_YvXI0esrjOm4w09poU",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/getComments?productId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"getComments"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "活动",
+							"disabled": true
+						},
+						{
+							"key": "productId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "notice/getList 公告列表分页接口",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTE5OTMsImV4cCI6MTc0NjU5NTU5MywiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.5hWQmDkcvkGMNo7BxMuJfCD_1yPSFl7jkxcnoi5GigQ",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/Notice/getList?page=1&limit=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"Notice",
+						"getList"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "keyword",
+							"value": "13",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "手机",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "upload/image",
 			"request": {
 				"method": "POST",
@@ -399,6 +541,103 @@
 			"response": []
 		},
 		{
+			"name": "articles/addComment 文章评论",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY2NzI0MDYsImV4cCI6MTc0NjY3NjAwNiwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.GJvGRjzYz4Jhd_0XQNxD7WIR_YvXI0esrjOm4w09poU",
+						"type": "default",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"article_id\": 1, \"content\": \"这是一条评论3\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/articles/addComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"articles",
+						"addComment"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": "三星",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "活动",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "articles/getComments 获取文章评论",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY2NzI0MDYsImV4cCI6MTc0NjY3NjAwNiwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.GJvGRjzYz4Jhd_0XQNxD7WIR_YvXI0esrjOm4w09poU",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/articles/getComments?articleId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"articles",
+						"getComments"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "活动",
+							"disabled": true
+						},
+						{
+							"key": "articleId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "user/favorite/article/toggle 用户收藏或取消收藏文章接口",
 			"request": {
 				"method": "POST",
@@ -520,6 +759,76 @@
 					"path": [
 						"user",
 						"updateProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/create 发布帖子",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTg1NTgsImV4cCI6MTc0NjYwMjE1OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.-HlqlnnXkEcDwkCnmM-_jwoofEvVA_3M472CyMXipM8",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"如何学好ThinkPHP？\",\r\n  \"content\": \"我刚开始学习TP框架，请大家给点建议。\",\r\n  \"type\": \"问答\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/post/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"post",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/list 获取帖子",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTg1NTgsImV4cCI6MTc0NjYwMjE1OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.-HlqlnnXkEcDwkCnmM-_jwoofEvVA_3M472CyMXipM8",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"如何学好ThinkPHP？\",\r\n  \"content\": \"我刚开始学习TP框架，请大家给点建议。\",\r\n  \"type\": \"问答\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/post/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"post",
+						"create"
 					]
 				}
 			},
