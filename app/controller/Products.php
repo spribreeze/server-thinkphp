@@ -131,7 +131,11 @@ class Products
             ->select();
 
         if ($comments) {
-            return json(['status' => 'success', 'data' => $comments]);
+            return json([                
+                'code' => 200,
+                'msg' => '获取评论成功', 
+                'data' => $comments
+            ]);
         } else {
             return json(['status' => 'error', 'message' => '暂无评论'], 404);
         }

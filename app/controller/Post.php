@@ -72,6 +72,9 @@ class Post
      */
     public function getPostList(Request $request)
     {
+        // 获取当前登录用户ID（假设通过中间件注入）
+        $userId = $request->user['user_id'] ?? null;
+
         // 获取请求参数
         $page = $request->param('page', 1);       // 当前页码
         $limit = $request->param('limit', 10);     // 每页条数
@@ -80,7 +83,7 @@ class Post
 
         // 构建查询条件
         $query = modelPost::with(['user' => function($q) {
-            $q->field(['id', 'username', 'nickname','avatar_url']); // 可选：只加载用户名
+            $q->field(['id', 'username', 'nickname', 'avatar_url']); // 加载用户基础信息
         }])->order('id', 'desc');
 
         // 关键字搜索（按标题或内容模糊匹配）
@@ -99,14 +102,41 @@ class Post
             'page'      => $page,
         ]);
 
+        // 处理每条帖子的数据，追加点赞数、评论数、是否点赞
+        $items = $list->items();
+
+        foreach ($items as &$item) {
+            // 帖子ID
+            $postId = $item['id'];
+
+            // 获取点赞数
+            $likeCount = PostLike::where('post_id', $postId)->count();
+
+            // 获取评论数
+            $commentCount = PostComment::where('post_id', $postId)->count();
+
+            // 判断当前用户是否点赞了该帖子
+            $isLiked = false;
+            if ($userId) {
+                $isLiked = PostLike::where('user_id', $userId)
+                                ->where('post_id', $postId)
+                                ->find() ? true : false;
+            }
+
+            // 添加扩展字段
+            $item['like_count'] = $likeCount;
+            $item['comment_count'] = $commentCount;
+            $item['is_liked'] = $isLiked;
+        }
+
         return json([
             'code' => 200,
             'msg'  => 'success',
             'data' => [
-                'items' => $list->items(),         // 当前页数据
-                'total' => $list->total(),         // 总记录数
-                'page'  => $list->currentPage(),   // 当前页码
-                'limit' => $list->listRows(),      // 每页条数
+                'items' => $items,                   // 已增强的帖子列表数据
+                'total' => $list->total(),           // 总记录数
+                'page'  => $list->currentPage(),     // 当前页码
+                'limit' => $list->listRows(),        // 每页条数
             ],
         ]);
     }
