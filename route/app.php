@@ -71,6 +71,8 @@ Route::post('notice/getList', 'Notice/getList');
 Route::post('post/create', 'Post/createPost')->middleware(JwtAuth::class);
 // 获取帖子列表
 Route::get('post/list', 'Post/getPostList')->middleware(JwtAuthNotReturn::class);
+// 
+Route::get('post/getDetail', 'Post/getDetail')->middleware(JwtAuthNotReturn::class);
 // 帖子发布评论
 Route::post('post/addComment', 'Post/commentPost')->middleware(JwtAuth::class);
 // 获取帖子评论
