@@ -6,6 +6,7 @@ use think\Request;
 use app\model\Post as modelPost;
 use app\model\PostComment;
 use app\model\PostLike;
+use app\model\PostType;
 use app\model\User;
 
 class Post
@@ -143,15 +144,16 @@ class Post
         $userId = $request->user['user_id'] ?? null;
 
         // 获取请求参数
-        $page = $request->param('page', 1);       // 当前页码
-        $limit = $request->param('limit', 10);     // 每页条数
-        $keyword = $request->param('keyword', ''); // 关键字搜索
-        $type = $request->param('type', '');       // 类型筛选
+        $page = $request->param('page', 1);         // 当前页码
+        $limit = $request->param('limit', 10);       // 每页条数
+        $keyword = $request->param('keyword', '');   // 标题/内容搜索
+        $type = $request->param('type', '');         // 类型筛选
+        $nickname = $request->param('nickname', ''); // 用户昵称搜索
 
         // 构建查询条件
         $query = modelPost::with(['user' => function($q) {
-            $q->field(['id', 'username', 'nickname', 'avatar_url']); // 加载用户基础信息
-        }])->order('id', 'desc');
+            $q->field(['id', 'username', 'nickname', 'avatar_url']); // 用户信息
+        }])->order('post.id', 'desc'); // 指定 post.id 避免歧义
 
         // 关键字搜索（按标题或内容模糊匹配）
         if (!empty($keyword)) {
@@ -163,6 +165,11 @@ class Post
             $query->where('type', '=', $type);
         }
 
+        if (!empty($nickname)) {
+            $query->join('users', 'post.user_id = users.id')
+                ->where('users.nickname', 'like', '%' . $nickname . '%');
+        }
+        
         // 分页查询
         $list = $query->paginate([
             'list_rows' => $limit,
@@ -391,5 +398,47 @@ class Post
             ]
         ]);
     }
+
+
+    /**
+     * 获取所有唯一的帖子类型（去重）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    // public function getPostTypes(Request $request)
+    // {
+    //     // 查询并去重获取所有 type，并提取为一维数组
+    //     $typeList = modelPost::distinct(true)
+    //         ->whereNotNull('type')
+    //         ->where('type', '<>', '')
+    //         ->order('type', 'asc')
+    //         ->column('type');
+
+    //     return json([
+    //         'code' => 200,
+    //         'msg'  => 'success',
+    //         'data' => $typeList
+    //     ]);
+    // }
+
+    /**
+     * 获取所有帖子类型
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getPostTypes(Request $request)
+    {
+        // 查询所有帖子类型，只取 name 字段并转为一维数组
+        $types = PostType::column('name');
+
+        return json([
+            'code' => 200,
+            'msg'  => 'success',
+            'data' => $types, // 直接返回纯字符串数组
+        ]);
+    }
+
 
 }

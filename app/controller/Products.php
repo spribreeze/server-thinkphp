@@ -5,6 +5,7 @@ namespace app\controller;
 use think\Request;
 use app\model\Product; // 商品模型
 use app\model\UserFavorite;
+use app\model\productType;
 use app\model\ProductComment;
 
 class Products
@@ -190,6 +191,24 @@ class Products
             'code' => 200,
             'msg'  => 'success',
             'data' => $mergedData,
+        ]);
+    }
+
+    /**
+     * 获取所有帖子类型
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getProductsTypes(Request $request)
+    {
+        // 查询所有帖子类型，只取 name 字段并转为一维数组
+        $types = productType::column('name');
+
+        return json([
+            'code' => 200,
+            'msg'  => 'success',
+            'data' => $types, // 直接返回纯字符串数组
         ]);
     }
 
