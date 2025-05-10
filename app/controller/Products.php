@@ -185,8 +185,12 @@ class Products
             'is_favorited'   => $isFavorited,
         ]);
 
-        // 返回 JSON 数据
-        return json($mergedData);
+        // 返回标准 JSON 格式响应
+        return json([
+            'code' => 200,
+            'msg'  => 'success',
+            'data' => $mergedData,
+        ]);
     }
 
 

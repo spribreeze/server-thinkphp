@@ -10,6 +10,73 @@ use app\model\User;
 
 class Post
 {
+
+    public function getDetail(Request $request)
+    {
+        // 获取帖子ID，优先获取 post_id，其次 postId，最后默认为0
+        $id = $request->param('post_id', $request->param('postId', 0));
+
+        // 查询帖子数据，并预加载 user 关联模型（获取发帖人信息）
+        $post = modelPost::with(['user' => function ($query) {
+            $query->field(['id', 'username', 'nickname', 'avatar_url']); // 只加载必要的字段
+        }])->find($id);
+
+        if (empty($post)) {
+            return json(['error' => 'Post not found'], 404);
+        }
+
+        // 转换为数组以便后续合并数据
+        $postArray = $post->toArray();
+
+        // // 获取所有评论
+        // $comments = PostComment::where('post_id', '=', $id)->select();
+        // $commentCount = count($comments);
+        // 查询评论数据，并预加载 user 关联模型（获取评论用户的用户名、昵称、头像）
+            $comments = PostComment::with(['user' => function ($query) {
+                $query->field(['id', 'username', 'nickname', 'avatar_url']);
+            }])
+            ->where('post_id', '=', $id)
+            ->select();
+
+            // 将评论数据转为数组，并提取用户信息
+            $commentsArray = [];
+            foreach ($comments as $comment) {
+                $commentArray = $comment->toArray();
+                $commentArray['user'] = $comment->user ? $comment->user->toArray() : null;
+                $commentsArray[] = $commentArray;
+            }
+
+            $commentCount = count($commentsArray);
+
+        // 获取点赞数
+        $likeCount = PostLike::where('post_id', '=', $id)->count();
+
+        // 判断当前用户是否已点赞该帖子
+        $userId = $request->user['user_id'] ?? null;
+        $isLiked = false;
+        if ($userId) {
+            $isLiked = PostLike::where('post_id', '=', $id)
+                ->where('user_id', '=', $userId)
+                ->count() > 0;
+        }
+
+        // 合并帖子信息和扩展字段
+        $mergedData = array_merge($postArray, [
+            'comments'      => $comments,
+            'comment_count' => $commentCount,
+            'favorite_count'    => $likeCount,
+            'is_favorited'      => $isLiked,
+        ]);
+
+        // 返回标准 JSON 格式响应
+        return json([
+            'code' => 200,
+            'msg'  => 'success',
+            'data' => $mergedData,
+        ]);
+    }
+
+
     /**
      * 用户发布帖子接口
      *
@@ -124,9 +191,9 @@ class Post
             }
 
             // 添加扩展字段
-            $item['like_count'] = $likeCount;
+            $item['favorite_count'] = $likeCount;
             $item['comment_count'] = $commentCount;
-            $item['is_liked'] = $isLiked;
+            $item['is_favorited'] = $isLiked;
         }
 
         return json([
@@ -156,7 +223,8 @@ class Post
         }
 
         // 参数校验
-        $postId = $request->post('post_id/d', 0);
+        // $postId = $request->post('post_id/d', 0);
+        $postId = $request->post('post_id', $request->post('postId', 0));
         $content = $request->post('content', '');
 
         if (empty($postId)) {
@@ -194,7 +262,10 @@ class Post
      */
     public function getPostComments(Request $request)
     {
-        $postId = $request->get('post_id/d', 0);
+        // $postId = $request->get('post_id/d', 0);
+        $postId = $request->param('post_id', $request->param('postId', 0));
+
+
         $page = $request->get('page/d', 1);
         $limit = $request->get('limit/d', 10);
 

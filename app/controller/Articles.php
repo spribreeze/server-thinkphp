@@ -131,18 +131,24 @@ class Articles
     //  获取文章评论
     public function getCommentsByArticleId(Request $request)
     {
-        $articleId = $request->param('articleId', 0);
+        // $articleId = $request->param('articleId', 0);
+        $articleId = $request->param('articleId', $request->param('article_id', 0));
 
         $comments = ArticlesComments::with('user') // 使用with预加载用户数据
             ->where('article_id', '=', $articleId)
             ->order('created_at', 'desc')
             ->select();
 
-        if ($comments) {
-            return json(['status' => 'success', 'data' => $comments]);
-        } else {
-            return json(['status' => 'error', 'message' => '没有找到相关评论'], 404);
-        }
+        // if ($comments) {
+            // 返回标准 JSON 格式响应
+            return json([
+                'code' => 200,
+                'msg'  => 'success',
+                'data' => $comments,
+            ]);
+        // } else {
+        //     return json(['status' => 'error', 'message' => '没有找到相关评论'], 404);
+        // }
     }
 
 
