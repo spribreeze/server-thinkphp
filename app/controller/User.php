@@ -48,43 +48,62 @@ class User
         }
     }
 
-    // 获取用户收藏商品列表
     public function getFavoriteList(Request $request)
     {
         // 获取当前登录用户ID
-        // $userId = $request->user->user_id; // 根据实际 Token 解析出的字段修改
-        $userId = $request->user['user_id'];
+        $userId = $request->user['user_id'] ?? null;
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未授权'], 401);
+        }
+
         // 获取分页与搜索参数
         $page = $request->get('page', 1);
         $limit = $request->get('limit', 10);
         $keyword = $request->get('keyword', '');
-    
-        // 构建查询条件
-        $query = Product::alias('p')
+
+        // 查询收藏商品并预加载 images 关联模型
+        $listQuery = Product::alias('p')
             ->join('user_favorites f', 'p.id = f.product_id')
             ->where('f.user_id', $userId);
-    
+
         // 关键字搜索
         if (!empty($keyword)) {
-            $query->where(function ($subQuery) use ($keyword) {
+            $listQuery->where(function ($subQuery) use ($keyword) {
                 $subQuery->where('p.name|p.description', 'like', "%$keyword%");
             });
         }
-    
-        // 执行分页查询
-        $list = $query->field('p.*')
+
+        // 预加载商品图片（按 sort_order 排序）
+        $list = $listQuery
+            ->with(['images' => function ($query) {
+                $query->order('sort_order', 'asc'); // 可选：只取第一张图 $query->order('sort_order', 'asc')->limit(1);
+            }])
+            ->field('p.*')
             ->order('f.created_at', 'desc')
             ->paginate([
                 'list_rows' => $limit,
                 'page'      => $page,
             ]);
-    
+
+        // 将每条商品记录转为数组，并处理图片字段
+        $items = array_map(function ($item) {
+            $itemArray = is_array($item) ? $item : $item->toArray();
+
+            // 示例：提取第一张图作为封面图
+            $firstImage = !empty($itemArray['images']) ? $itemArray['images'][0]['image_url'] : '';
+
+            return array_merge($itemArray, [
+                'cover_image' => $firstImage,     // 添加首张图字段
+                // 'all_images' => array_column($itemArray['images'], 'image_url'), // 所有图片 URL 数组
+            ]);
+        }, $list->items());
+
         // 返回结果
         return json([
             'code' => 200,
             'msg' => 'success',
             'data' => [
-                'items' => $list->items(),
+                'items' => $items,
                 'total' => $list->total(),
                 'page'  => $list->currentPage(),
                 'limit' => $list->listRows(),
