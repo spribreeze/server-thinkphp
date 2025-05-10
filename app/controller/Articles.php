@@ -54,26 +54,40 @@ class Articles
                 ->whereIn('article_id', $articleIds)
                 ->column('article_id');
         }
-        
-        // 查询每个商品的点赞数
+        // 查询每个文章的点赞数
         $favoriteCounts = UserArticleFavorite::whereIn('article_id', $articleIds)
             ->group('article_id')
             ->field('article_id, count(*) as favorite_count')
             ->select()
             ->toArray();
-    
         // 将点赞数转换为关联数组，方便查找
         $favoriteCountMap = [];
         foreach ($favoriteCounts as $item) {
             $favoriteCountMap[$item['article_id']] = $item['favorite_count'];
         }
 
-        // 处理返回的数据，添加 is_favorited 字段
+        // 查询每个文章的评论数
+        $commentCounts = ArticlesComments::whereIn('article_id', $articleIds)
+            ->group('article_id')
+            ->field('article_id, count(*) as comment_count')
+            ->select()
+            ->toArray();
+
+        // 将评论数转换为关联数组
+        $commentCountMap = [];
+        foreach ($commentCounts as $item) {
+            $commentCountMap[$item['article_id']] = $item['comment_count'];
+        }
+
+        // 处理返回的数据，添加 is_favorited 和 comment_count 字段
         foreach ($list->items() as $item) {
             $items[] = array_merge(
                 $item->toArray(),
-                ['favorite_count' => $favoriteCountMap[$item->id] ?? 0], // 默认点赞数为0
-                ['is_favorited' => in_array($item->id, $favoritedArticles)]
+                [
+                    'favorite_count' => $favoriteCountMap[$item->id] ?? 0,
+                    'is_favorited' => in_array($item->id, $favoritedArticles),
+                    'comment_count' => $commentCountMap[$item->id] ?? 0
+                ]
             );
         }
 
@@ -87,7 +101,6 @@ class Articles
                 'limit' => $list->listRows(),    // 每页条数
             ],
         ]);
-
     }
 
     //  文章评论
