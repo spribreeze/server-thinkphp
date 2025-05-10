@@ -230,9 +230,9 @@ class User
             $updates['phone'] = $phone;
         }
 
-        $userCol01 = $request->post('userCol01', '');
-        if (!empty($userCol01)) {
-            $updates['userCol01'] = $userCol01;
+        $avatar_url = $request->post('avatar_url', '');
+        if (!empty($avatar_url)) {
+            $updates['avatar_url'] = $avatar_url;
         }
 
         $userCol02 = $request->post('userCol02', '');

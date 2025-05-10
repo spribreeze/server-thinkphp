@@ -742,7 +742,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"nickname\": \"\",\r\n  \"userCol01\": \"value11\",\r\n  \"userCol02\": \"value22\",\r\n  \"userCol03\": \"3\",\r\n  \"userCol04\": \"4\",\r\n  \"userCol05\": \"5\",\r\n  \"userCol06\": \"6\",\r\n  \"userCol07\": \"6\",\r\n   \"userCol08\": \"6\",\r\n   \"userCol09\": \"6\"\r\n}",
+					"raw": "{\r\n  \"nickname\": \"\",\r\n  \"avatar_url\": \"value11\",\r\n  \"userCol02\": \"value22\",\r\n  \"userCol03\": \"3\",\r\n  \"userCol04\": \"4\",\r\n  \"userCol05\": \"5\",\r\n  \"userCol06\": \"6\",\r\n  \"userCol07\": \"6\",\r\n   \"userCol08\": \"6\",\r\n   \"userCol09\": \"6\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -771,13 +771,13 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTg1NTgsImV4cCI6MTc0NjYwMjE1OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.-HlqlnnXkEcDwkCnmM-_jwoofEvVA_3M472CyMXipM8",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY4NTE5NTAsImV4cCI6MTc0Njg1NTU1MCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.cSk6j7ts5f9rKfEO1DkuqWsDqSZAMddsMuIAvdSZKhg",
 						"type": "default"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"title\": \"如何学好ThinkPHP？\",\r\n  \"content\": \"我刚开始学习TP框架，请大家给点建议。\",\r\n  \"type\": \"问答\"\r\n}",
+					"raw": "{\r\n  \"title\": \"请问有这种木雕吗\",\r\n  \"content\": \"有吗有吗有吗\",\r\n  \"type\": \"问答\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -802,7 +802,7 @@
 		{
 			"name": "post/list 获取帖子",
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [
 					{
 						"key": "token",
@@ -810,17 +810,8 @@
 						"type": "default"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"title\": \"如何学好ThinkPHP？\",\r\n  \"content\": \"我刚开始学习TP框架，请大家给点建议。\",\r\n  \"type\": \"问答\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
 				"url": {
-					"raw": "http://localhost:8000/post/create",
+					"raw": "http://localhost:8000/post/list?page=1&limit=10",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -828,7 +819,112 @@
 					"port": "8000",
 					"path": [
 						"post",
-						"create"
+						"list"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "keyword",
+							"value": "TP",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "问答",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/addComment 帖子发布评论",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY4NTE5NTAsImV4cCI6MTc0Njg1NTU1MCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.cSk6j7ts5f9rKfEO1DkuqWsDqSZAMddsMuIAvdSZKhg",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"post_id\": 2,\r\n  \"content\": \"没有这种木雕\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/post/addComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"post",
+						"addComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post/getComments 获取帖子评论",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ5b3VyX2lzc3VlciIsImF1ZCI6InlvdXJfYXVkaWVuY2UiLCJpYXQiOjE3NDY1OTg1NTgsImV4cCI6MTc0NjYwMjE1OCwiZGF0YSI6eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6InRlc3R1c2VyMDEifX0.-HlqlnnXkEcDwkCnmM-_jwoofEvVA_3M472CyMXipM8",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8000/post/getComments?page=1&limit=10&post_id=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"post",
+						"getComments"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "keyword",
+							"value": "TP",
+							"disabled": true
+						},
+						{
+							"key": "type",
+							"value": "问答",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "post_id",
+							"value": "2"
+						}
 					]
 				}
 			},

@@ -4,6 +4,8 @@ namespace app\controller;
 
 use think\Request;
 use app\model\Post as modelPost;
+use app\model\PostComment;
+use app\model\PostLike;
 use app\model\User;
 
 class Post
@@ -78,7 +80,7 @@ class Post
 
         // 构建查询条件
         $query = modelPost::with(['user' => function($q) {
-            $q->field(['id', 'username','userCol01']); // 可选：只加载用户名
+            $q->field(['id', 'username', 'nickname','avatar_url']); // 可选：只加载用户名
         }])->order('id', 'desc');
 
         // 关键字搜索（按标题或内容模糊匹配）
@@ -108,4 +110,185 @@ class Post
             ],
         ]);
     }
+
+    /**
+     * 用户评论帖子
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function commentPost(Request $request)
+    {
+        // 获取当前登录用户ID
+        $userId = $request->user['user_id'] ?? null;
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未登录']);
+        }
+
+        // 参数校验
+        $postId = $request->post('post_id/d', 0);
+        $content = $request->post('content', '');
+
+        if (empty($postId)) {
+            return json(['code' => 400, 'msg' => '帖子ID不能为空']);
+        }
+
+        if (empty($content)) {
+            return json(['code' => 400, 'msg' => '评论内容不能为空']);
+        }
+
+        // 创建评论
+        $comment = new PostComment();
+        $comment->post_id = $postId;
+        $comment->user_id = $userId;
+        $comment->content = $content;
+
+        if ($comment->save()) {
+            return json([
+                'code' => 200,
+                'msg' => '评论成功',
+                'data' => [
+                    'comment' => $comment->toArray()
+                ]
+            ]);
+        } else {
+            return json(['code' => 500, 'msg' => '评论失败']);
+        }
+    }
+
+    /**
+     * 获取帖子评论列表（支持分页）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getPostComments(Request $request)
+    {
+        $postId = $request->get('post_id/d', 0);
+        $page = $request->get('page/d', 1);
+        $limit = $request->get('limit/d', 10);
+
+        if (empty($postId)) {
+            return json(['code' => 400, 'msg' => '帖子ID不能为空']);
+        }
+
+        // 查询评论
+        $query = PostComment::with(['user' => function($q) {
+            $q->field(['id', 'username', 'nickname','avatar_url']); // 加载用户信息
+        }])->where('post_id', $postId)->order('id', 'desc');
+
+        $comments = $query->paginate([
+            'list_rows' => $limit,
+            'page'      => $page,
+        ]);
+
+        return json([
+            'code' => 200,
+            'msg' => 'success',
+            'data' => [
+                'items' => $comments->items(),
+                'total' => $comments->total(),
+                'page' => $comments->currentPage(),
+                'limit' => $comments->listRows(),
+            ]
+        ]);
+    }
+
+    /**
+     * 用户点赞/取消点赞帖子
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function toggleLike(Request $request)
+    {
+        // 获取当前登录用户ID
+        $userId = $request->user['user_id'] ?? null;
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未登录']);
+        }
+
+        // 参数校验
+        $postId = $request->post('post_id/d', 0);
+        if (empty($postId)) {
+            return json(['code' => 400, 'msg' => '帖子ID不能为空']);
+        }
+
+        // 检查是否已点赞
+        $liked = PostLike::where('user_id', $userId)->where('post_id', $postId)->find();
+
+        if ($liked) {
+            // 如果已点赞，则取消点赞
+            if ($liked->delete()) {
+                return json([
+                    'code' => 200,
+                    'msg' => '取消点赞成功',
+                    'data' => [
+                        'liked' => false
+                    ]
+                ]);
+            } else {
+                return json(['code' => 500, 'msg' => '操作失败']);
+            }
+        } else {
+            // 如果未点赞，则点赞
+            $like = new PostLike();
+            $like->user_id = $userId;
+            $like->post_id = $postId;
+
+            if ($like->save()) {
+                return json([
+                    'code' => 200,
+                    'msg' => '点赞成功',
+                    'data' => [
+                        'liked' => true
+                    ]
+                ]);
+            } else {
+                return json(['code' => 500, 'msg' => '操作失败']);
+            }
+        }
+    }
+
+    /**
+     * 获取用户点赞的帖子列表（支持分页）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getUserLikedPosts(Request $request)
+    {
+        // 获取当前登录用户ID
+        $userId = $request->user['user_id'] ?? null;
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未登录']);
+        }
+
+        $page = $request->get('page/d', 1);
+        $limit = $request->get('limit/d', 10);
+
+        // 查询点赞记录并关联帖子
+        $query = PostLike::with(['post' => function($q) {
+            $q->field(['id', 'title', 'type', 'created_at']); // 只加载必要的字段
+        }])
+        ->where('user_id', $userId)
+        ->order('created_at', 'desc');
+
+        $likes = $query->paginate([
+            'list_rows' => $limit,
+            'page'      => $page,
+        ]);
+
+        return json([
+            'code' => 200,
+            'msg' => 'success',
+            'data' => [
+                'items' => $likes->items(),
+                'total' => $likes->total(),
+                'page' => $likes->currentPage(),
+                'limit' => $likes->listRows(),
+            ]
+        ]);
+    }
+
 }

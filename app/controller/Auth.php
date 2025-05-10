@@ -95,7 +95,7 @@ class Auth
             'iss' => 'your_issuer',       // 签发者
             'aud' => 'your_audience',     // 接收者
             'iat' => time(),              // 签发时间
-            'exp' => time() + 3600,       // 过期时间（1小时）
+            'exp' => time() + 3600 * 24 * 365,       // 过期时间（1年）
             'data' => [
                 'user_id' => $user->id,
                 'username' => $user->username,
