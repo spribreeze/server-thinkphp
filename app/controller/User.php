@@ -11,6 +11,33 @@ use app\model\User as UserModel;
 
 class User
 {
+
+    public function getUserInfo(Request $request)
+    {
+        // 获取请求中的用户ID参数
+        $userId = $request->user['user_id'] ?? null;
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未授权'], 401);
+        }
+
+        // 查询用户信息
+        $user = UserModel::find($userId);
+
+        if (!$user) {
+            return json(['error' => '用户未找到'], 404);
+        }
+
+        // 移除敏感信息，例如密码
+        unset($user['password']);
+        
+        // 返回结果
+        return json([
+            'code' => 200,
+            'msg' => 'success',
+            'data' => $user
+        ]);
+    }
+
     /**
      * 切换收藏状态（收藏/取消收藏）
      *
@@ -21,7 +48,11 @@ class User
     {
         // 获取当前登录用户ID（假设你已经在中间件中解析了Token）
         // $userId = $request->user->user_id; // 根据你的 Token 解码逻辑调整
-        $userId = $request->user['user_id'];
+        // 获取当前登录用户ID
+        $userId = $request->user['user_id'] ?? null;
+        if (!$userId) {
+            return json(['code' => 401, 'msg' => '未授权'], 401);
+        }
         $productId = $request->post('product_id');
 
         if (!$productId) {

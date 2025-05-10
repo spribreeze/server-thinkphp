@@ -145,4 +145,64 @@ class Articles
         }
     }
 
+
+    public function getDetail(Request $request)
+    {
+        // 获取文章ID，优先取 article_id，其次 articleId，否则默认为0
+        $id = $request->param('article_id', $request->param('articleId', 0));
+
+        // 查询文章主数据
+        $article = Article::find($id);
+
+        if (empty($article)) {
+            return json([
+                'code' => 404,
+                'msg'  => '文章不存在',
+                'data' => []
+            ], 404);
+        }
+
+        // 转换为数组以便后续处理
+        $articleArray = $article->toArray();
+
+        // 获取所有评论（关联用户表获取用户名）
+        $comments = ArticlesComments::where('article_id', '=', $id)
+            ->alias('c')
+            ->join('users u', 'c.user_id = u.id')
+            ->field('c.*, u.username')
+            ->order('c.created_at', 'desc')
+            ->select()
+            ->toArray();
+
+        $commentCount = count($comments);
+
+        // 获取收藏总数
+        $favoriteCount = UserArticleFavorite::where('article_id', '=', $id)->count();
+
+        // 判断当前用户是否已收藏
+        $userId = $request->user['user_id'] ?? null;
+        $isFavorited = false;
+
+        if ($userId) {
+            $isFavorited = UserArticleFavorite::where('article_id', '=', $id)
+                ->where('user_id', '=', $userId)
+                ->count() > 0;
+        }
+
+        // 合并文章信息和扩展字段
+        $data = array_merge($articleArray, [
+            'comments'       => $comments,
+            'comment_count'  => $commentCount,
+            'favorite_count' => $favoriteCount,
+            'is_favorited'   => $isFavorited,
+        ]);
+
+        // 返回标准 JSON 格式响应
+        return json([
+            'code' => 200,
+            'msg'  => 'success',
+            'data' => $data,
+        ]);
+    }
+
 }
