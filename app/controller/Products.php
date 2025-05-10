@@ -101,10 +101,11 @@ class Products
         $comment = new ProductComment();
 
         $userId = $request->user['user_id'] ?? null;
-
+        $productId = $request->post('product_id', $request->post('productId', 0));
+        
         if ($userId) {
             $result = $comment->save([
-                'product_id' => $data['product_id'],
+                'product_id' => $productId,
                 'user_id' => $userId,
                 'content' => $data['content']
             ]);
@@ -123,7 +124,9 @@ class Products
     // 获取商品的所有评论
     public function getCommentsByProductId(Request $request)
     {
-        $productId = $request->param('productId', 0);
+        // $productId = $request->param('productId', 0);
+        $productId = $request->param('product_id', $request->param('productId', 0));
+
 
         $comments = ProductComment::with('user') // 自动带上用户信息（不包括密码）
             ->where('product_id', '=', $productId)
@@ -140,5 +143,51 @@ class Products
             return json(['status' => 'error', 'message' => '暂无评论'], 404);
         }
     }
+
+    public function getDetail(Request $request)
+    {
+        // 获取商品ID，优先获取 product_id，其次 productId，最后默认为0
+        $id = $request->param('product_id', $request->param('productId', 0));
+
+        // 查询商品数据，并预加载 images 关联模型（按 sort_order 升序）
+        $product = Product::with(['images' => function ($query) {
+            $query->order('sort_order', 'asc');
+        }])->find($id);
+
+        if (empty($product)) {
+            return json(['error' => 'Product not found'], 404);
+        }
+
+        // 转换为数组以便后续合并数据
+        $productArray = $product->toArray();
+
+        // 获取所有评论
+        $comments = ProductComment::where('product_id', '=', $id)->select();
+        $commentCount = count($comments);
+
+        // 获取收藏数
+        $favoriteCount = UserFavorite::where('product_id', '=', $id)->count();
+
+        // 判断当前用户是否收藏了该商品
+        $userId = $request->user['user_id'] ?? null;
+        $isFavorited = false;
+        if ($userId) {
+            $isFavorited = UserFavorite::where('product_id', '=', $id)
+                ->where('user_id', '=', $userId)
+                ->count() > 0;
+        }
+
+        // 合并商品信息和扩展字段
+        $mergedData = array_merge($productArray, [
+            'comments'       => $comments,
+            'comment_count'  => $commentCount,
+            'favorite_count' => $favoriteCount,
+            'is_favorited'   => $isFavorited,
+        ]);
+
+        // 返回 JSON 数据
+        return json($mergedData);
+    }
+
 
 }
