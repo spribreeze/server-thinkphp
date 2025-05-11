@@ -441,4 +441,60 @@ class Post
     }
 
 
+
+    /**
+     * 获取指定用户的帖子列表
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getUserPosts(Request $request)
+    {
+        // 获取请求中的 user_id 参数
+        $userId = $request->user['user_id'] ?? null;
+        if (empty($userId)) {
+            return json([
+                'code' => 200,
+                'msg'  => 'Missing user_id parameter',
+                'data' => [],
+            ]);
+        }
+
+        // 查询该用户的所有帖子，并按发布时间降序排列
+        $posts = modelPost::with(['user' => function ($q) {
+            $q->field(['id', 'username', 'nickname', 'avatar_url']); // 加载用户基础信息
+        }])
+        ->where('user_id', '=', $userId)
+        ->order('created_at', 'desc')
+        ->paginate([
+            'list_rows' => 10, // 每页显示的帖子数量
+            'query' => request()->param(), // 保持分页URL上的参数
+        ]);
+
+        // 处理每条帖子的数据，追加点赞数、评论数、是否点赞等信息
+        $items = $posts->items();
+        foreach ($items as &$item) {
+            // 获取点赞数
+            $likeCount = PostLike::where('post_id', $item['id'])->count();
+
+            // 获取评论数
+            $commentCount = PostComment::where('post_id', $item['id'])->count();
+
+            // 添加扩展字段
+            $item['favorite_count'] = $likeCount;
+            $item['comment_count'] = $commentCount;
+        }
+
+        return json([
+            'code' => 200,
+            'msg'  => 'success',
+            'data' => [
+                'items' => $items,                   // 已增强的帖子列表数据
+                'total' => $posts->total(),           // 总记录数
+                'page'  => $posts->currentPage(),     // 当前页码
+                'limit' => $posts->listRows(),        // 每页条数
+            ],
+        ]);
+    }
+
 }

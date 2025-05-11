@@ -47,7 +47,7 @@ Route::get('user/favorite/products/list', 'User/getFavoriteList')->middleware(Jw
 // 判断某个商品是否已被当前用户收藏
 Route::get('user/favorite/products/check', 'User/isFavorited')->middleware(JwtAuth::class);
 // 
-Route::get('products/getProductsTypes', 'Products/getProductsTypes');
+Route::get('products/getProductsType', 'Products/getProductsTypes');
 
 
 // 获取用户信息
@@ -89,3 +89,5 @@ Route::post('post/toggleLike', 'Post/toggleLike')->middleware(JwtAuth::class);
 Route::get('post/getUserLikedPosts', 'Post/getUserLikedPosts')->middleware(JwtAuth::class);
 // 获取所有帖子类型
 Route::get('post/getPostTypes', 'Post/getPostTypes');
+// 获取指定用户的帖子列表
+Route::get('post/getUserPosts','Post/getUserPosts')->middleware(JwtAuthNotReturn::class);
