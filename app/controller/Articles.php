@@ -6,7 +6,7 @@ use think\Request;
 use app\model\Article;
 use app\model\UserArticleFavorite;
 use app\model\ArticlesComments;
-
+use think\facade\Db;
 class Articles
 {
     /**
@@ -208,6 +208,36 @@ class Articles
             'code' => 200,
             'msg'  => 'success',
             'data' => $data,
+        ]);
+    }
+
+    /**
+     * 获取热度最高的前5篇文章（评论数 + 收藏数）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getTopHot(Request $request)
+    {
+        $articles = Db::table('articles a')
+            ->leftJoin('articles_comments ac', 'a.id = ac.article_id')
+            ->leftJoin('user_article_favorites uaf', 'a.id = uaf.article_id')
+            ->field('a.id, a.title, a.content, a.type, a.publish_time, a.image_url')
+            ->field('COUNT(DISTINCT ac.id) AS comment_count')
+            ->field('COUNT(DISTINCT uaf.id) AS favorite_count')
+            ->group('a.id')
+            // 使用原始SQL表达式排序，不能用别名
+            ->orderRaw('COUNT(DISTINCT ac.id) + COUNT(DISTINCT uaf.id) DESC')
+            ->limit(5)
+            ->select()
+            ->toArray();
+
+        return json([
+            'code' => 200,
+            'msg' => 'success',
+            'data' => [
+                'items' => $articles
+            ]
         ]);
     }
 

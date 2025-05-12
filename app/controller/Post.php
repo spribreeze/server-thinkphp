@@ -497,4 +497,78 @@ class Post
         ]);
     }
 
+    /**
+     * 获取热度最高的前5个帖子（点赞数 + 评论数）
+     *
+     * @param Request $request
+     * @return \think\Response
+     */
+    public function getTopHotPost(Request $request)
+    {
+
+        // 获取所有帖子 ID 列表
+        $postIds = modelPost::column('id');
+
+        if (empty($postIds)) {
+            return json([
+                'code' => 200,
+                'msg' => 'success',
+                'data' => [
+                    'items' => []
+                ]
+            ]);
+        }
+
+        // 获取每个帖子的点赞数
+        $likeCounts = PostLike::whereIn('post_id', $postIds)
+            ->group('post_id')
+            ->field('post_id, count(*) as like_count')
+            ->select()
+            ->toArray();
+
+        // 获取每个帖子的评论数
+        $commentCounts = PostComment::whereIn('post_id', $postIds)
+            ->group('post_id')
+            ->field('post_id, count(*) as comment_count')
+            ->select()
+            ->toArray();
+
+        // 构建 post_id => count 映射
+        $likesMap = array_column($likeCounts, 'like_count', 'post_id');
+        $commentsMap = array_column($commentCounts, 'comment_count', 'post_id');
+
+        // 查询所有帖子，并加载用户信息
+        $posts = modelPost::with(['user' => function ($q) {
+            $q->field(['id', 'username', 'nickname', 'avatar_url']);
+        }])
+            ->whereIn('id', $postIds)
+            ->select()
+            ->each(function ($post) use ($likesMap, $commentsMap) {
+                // 设置点赞数和评论数
+                $postId = $post->id;
+                $post->like_count = $likesMap[$postId] ?? 0;
+                $post->comment_count = $commentsMap[$postId] ?? 0;
+                // 计算热度值
+                $post->hot_score = $post->like_count + $post->comment_count;
+            })
+            ->toArray();
+            
+        // 使用 usort 手动按 hot_score 排序
+        usort($posts, function ($a, $b) {
+            return $b['hot_score'] <=> $a['hot_score'];
+        });
+
+        // 取前5个
+        $top5 = array_slice($posts, 0, 5);
+
+        return json([
+            'code' => 200,
+            'msg' => 'success',
+            'data' => [
+                'items' => $top5
+            ]
+        ]);
+
+    }
+
 }

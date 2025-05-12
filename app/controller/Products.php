@@ -212,5 +212,52 @@ class Products
         ]);
     }
 
+    // 根据评论数和收藏数计算热度最高的前5个商品
+    public function getTopHotProducts(Request $request)
+    {
+        // 查询条件：选择需要的字段，并通过子查询或联表查询获取评论数和收藏数
+        $products = Product::field('p.*, 
+            (SELECT COUNT(*) FROM product_comments WHERE product_id = p.id) AS comment_count,
+            (SELECT COUNT(*) FROM user_favorites WHERE product_id = p.id) AS favorite_count')
+            ->alias('p')
+            ->with(['images' => function($query){
+                $query->order('sort_order', 'asc');
+            }])
+            ->orderRaw('(comment_count * 1 + favorite_count * 2) DESC') // 根据你的需求调整权重
+            ->limit(5)
+            ->select();
+
+        // 处理每个商品的数据
+        $processedProducts = array_map(function($product) {
+            $itemArray = is_array($product) ? $product : $product->toArray();
+
+            // 初始化 cover_image 和 all_images
+            $coverImage = '';
+            $allImages = [];
+
+            if (isset($itemArray['images']) && is_array($itemArray['images']) && count($itemArray['images']) > 0) {
+                foreach ($itemArray['images'] as $image) {
+                    if (isset($image['image_url'])) {
+                        $allImages[] = $image['image_url'];
+                        if (empty($coverImage)) {
+                            $coverImage = $image['image_url'];
+                        }
+                    }
+                }
+            }
+
+            return array_merge($itemArray, [
+                'cover_image' => $coverImage,     // 添加首张图字段
+                'all_images' => $allImages,       // 所有图片 URL 数组
+            ]);
+        }, $products->toArray());
+
+        // 返回结果
+        return json([
+            'code' => 200,
+            'msg' => 'success',
+            'data' => $processedProducts
+        ]);
+    }
 
 }

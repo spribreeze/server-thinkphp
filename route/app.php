@@ -48,6 +48,8 @@ Route::get('user/favorite/products/list', 'User/getFavoriteList')->middleware(Jw
 Route::get('user/favorite/products/check', 'User/isFavorited')->middleware(JwtAuth::class);
 // 
 Route::get('products/getProductsType', 'Products/getProductsTypes');
+// 热门商品
+Route::get('products/getTopHot', 'Products/getTopHotProducts');
 
 
 // 获取用户信息
@@ -66,6 +68,8 @@ Route::get('articles/getComments', 'articles/getCommentsByArticleId');
 Route::post('user/favorite/article/toggle', 'User/toggleArticleFavorite')->middleware(JwtAuth::class);
 // 获取用户收藏的文章列表
 Route::get('user/favorite/article/list', 'User/getFavoriteArticles')->middleware(JwtAuth::class);
+// 热门文章
+Route::get('articles/getTopHot', 'articles/getTopHot');
 
 // 图片上传接口
 Route::post('upload/image', 'Upload/uploadImage');
@@ -91,3 +95,5 @@ Route::get('post/getUserLikedPosts', 'Post/getUserLikedPosts')->middleware(JwtAu
 Route::get('post/getPostTypes', 'Post/getPostTypes');
 // 获取指定用户的帖子列表
 Route::get('post/getUserPosts','Post/getUserPosts')->middleware(JwtAuthNotReturn::class);
+// 热门帖子
+Route::get('post/getTopHot', 'post/getTopHotPost');
