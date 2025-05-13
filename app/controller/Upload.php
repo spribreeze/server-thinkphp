@@ -26,6 +26,9 @@ class Upload
                     'msg' => '上传成功',
                     'data' => [
                         'url' => '/storage' . $webPath , // 文件访问URL
+                        'name' => $webPath ,
+                        'fillUrl' => 'http://localhost:8000/storage' . $webPath ,
+
                     ],
                 ]);
             } else {
