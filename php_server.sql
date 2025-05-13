@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : root
+ Source Server         : 139.224.250.70
  Source Server Type    : MySQL
- Source Server Version : 50724
- Source Host           : localhost:3306
+ Source Server Version : 50740
+ Source Host           : 139.224.250.70:3306
  Source Schema         : php_server
 
  Target Server Type    : MySQL
- Target Server Version : 50724
+ Target Server Version : 50740
  File Encoding         : 65001
 
- Date: 11/05/2025 10:51:25
+ Date: 13/05/2025 14:00:05
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `articles`  (
   `publish_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '发布时间',
   `image_url` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of articles
@@ -53,7 +53,7 @@ CREATE TABLE `articles_comments`  (
   INDEX `user_id`(`user_id`) USING BTREE,
   CONSTRAINT `articles_comments_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `articles_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of articles_comments
@@ -81,7 +81,7 @@ CREATE TABLE `notice`  (
   `updated_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_type`(`type`) USING BTREE COMMENT '索引: 类型'
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公告表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公告表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of notice
@@ -106,7 +106,7 @@ CREATE TABLE `post`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_user_id`(`user_id`) USING BTREE,
   INDEX `idx_type`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '帖子表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '帖子表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of post
@@ -114,6 +114,7 @@ CREATE TABLE `post`  (
 INSERT INTO `post` VALUES (1, 1, '如何学好ThinkPHP？', '我刚开始学习TP框架，请大家给点建议。', '问答', '2025-05-09 22:00:41', '2025-05-09 22:00:41');
 INSERT INTO `post` VALUES (2, 1, '请问有这种木雕吗', '有吗有吗有吗', '问答', '2025-05-10 12:41:01', '2025-05-10 12:41:01');
 INSERT INTO `post` VALUES (3, 2, '沙雕大甩卖！！', '<p>沙雕大甩卖！！</p>', '日常水贴', '2025-05-10 19:23:28', '2025-05-10 19:23:28');
+INSERT INTO `post` VALUES (4, 2, '添加图片终于成功啦！！', '<p><img src=\"http://139.224.250.70:8000//storage/uploads/20250512/f7fef13513f45c0739438aee2062171e.gif\" alt=\"\" data-href=\"\" style=\"\"/></p>', '日常水贴', '2025-05-12 22:12:35', '2025-05-12 22:12:35');
 
 -- ----------------------------
 -- Table structure for post_comment
@@ -128,7 +129,7 @@ CREATE TABLE `post_comment`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_post_id`(`post_id`) USING BTREE,
   INDEX `idx_user_id`(`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '帖子评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '帖子评论表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of post_comment
@@ -150,7 +151,7 @@ CREATE TABLE `post_like`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_user_post`(`user_id`, `post_id`) USING BTREE COMMENT '用户与帖子联合唯一索引',
   INDEX `idx_post_id`(`post_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '帖子点赞表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '帖子点赞表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of post_like
@@ -167,7 +168,7 @@ CREATE TABLE `post_types`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of post_types
@@ -193,7 +194,7 @@ CREATE TABLE `product_comments`  (
   INDEX `user_id`(`user_id`) USING BTREE,
   CONSTRAINT `product_comments_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `product_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of product_comments
@@ -222,7 +223,7 @@ CREATE TABLE `product_images`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `product_id`(`product_id`) USING BTREE,
   CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of product_images
@@ -240,7 +241,7 @@ CREATE TABLE `product_types`  (
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of product_types
@@ -273,12 +274,12 @@ CREATE TABLE `products`  (
   `column09` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `column10` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of products
 -- ----------------------------
-INSERT INTO `products` VALUES (1, 'iPhone 13', 7999.99, 'Apple iPhone 13 with A15 chip', '2025-04-29 22:21:33', 1, '手机', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `products` VALUES (1, 'iPhone 14', 7999.99, 'Apple iPhone 13 with A15 chip', '2025-05-12 14:35:10', 1, '手机', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `products` VALUES (2, 'Samsung Galaxy S21', 6999.99, 'Samsung flagship phone', '2025-04-29 22:21:37', 1, '手机', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `products` VALUES (3, 'MacBook Pro', 12999.98, 'Apple MacBook Pro 16-inch', '2025-04-29 22:21:44', 1, '笔记本电脑', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `products` VALUES (4, '商青铜立人像', 0.00, '在三星堆众多的青铜雕像群中，足以领衔群像的最高统治者非大立人像莫属，——不论是从服饰、形像还是体量等各方面看，这尊大立人像都堪称它们的“领袖”人物。以往殷墟出土的玉石铜人像与之相比，真可谓是“小巫”见“大巫”了。就全世界范围来看，三星堆青铜大立人也是同时期体量最大的青铜人物雕像。 雕像系采用分段浇铸法嵌铸而成，身体中空，分人像和底座两部分。人像头戴高冠，身穿窄袖与半臂式共三层衣，衣上纹饰繁复精丽，以龙纹为主，辅配鸟纹、虫纹和目纹等，身佩方格纹带饰。其双手手型环握中空，两臂略呈环抱状构势于胸前。脚戴足镯，赤足站立于方形怪兽座上。其整体形象典重庄严，似乎表现的是一个具有通天异禀、神威赫赫的大人物正在作法。其所站立的方台，即可理解为其作法的道场——神坛或神山。', '2025-05-03 14:56:34', 1, '0', '中国历史学年代,商(前1600~前1046)', '一级', '雕塑、造像', '高260.8cm，人像高180cm，底座横宽48.5cm，纵长46.7cm，高35cm', NULL, NULL, NULL, NULL, NULL, NULL);
@@ -294,12 +295,13 @@ CREATE TABLE `user_article_favorites`  (
   `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unique_user_article`(`user_id`, `article_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_article_favorites
 -- ----------------------------
 INSERT INTO `user_article_favorites` VALUES (1, 1, 1, '2025-05-03 18:05:13');
+INSERT INTO `user_article_favorites` VALUES (5, 2, 3, '2025-05-11 15:17:58');
 
 -- ----------------------------
 -- Table structure for user_favorites
@@ -312,7 +314,7 @@ CREATE TABLE `user_favorites`  (
   `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unique_user_product`(`user_id`, `product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_favorites
@@ -321,7 +323,6 @@ INSERT INTO `user_favorites` VALUES (7, 1, 2, '2025-05-03 21:34:38');
 INSERT INTO `user_favorites` VALUES (8, 1, 1, '2025-05-10 15:23:01');
 INSERT INTO `user_favorites` VALUES (13, 2, 1, '2025-05-10 16:17:54');
 INSERT INTO `user_favorites` VALUES (15, 1, 4, '2025-05-10 16:26:05');
-INSERT INTO `user_favorites` VALUES (17, 3, 4, '2025-05-10 18:24:34');
 
 -- ----------------------------
 -- Table structure for users
@@ -346,13 +347,13 @@ CREATE TABLE `users`  (
   `nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
 INSERT INTO `users` VALUES (1, 'testuser01', '$2y$10$wYVXkmeJ.L86JSvT96VNr.mGjtJWQaNwyJIYcUWJDTiCB2gIb3tN6', '', '', '2025-04-28 22:25:39', 'imgUrl', 'value22', '3', '4', '5', '6', '6', '6', '6', '小红');
-INSERT INTO `users` VALUES (2, 'testuser02', '$2y$10$ip6cMH2TjhIm3vXnAO9GjOv5mRb9GdfcHy.WBWfEB1JPkogefY.au', NULL, '181****7412', '2025-04-28 22:28:46', 'http://192.168.0.108:8000//storage/uploads/20250510/355b927b7698382ceabd56db2818fb51.png', '江宁区', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '张三');
+INSERT INTO `users` VALUES (2, 'testuser02', '$2y$10$ip6cMH2TjhIm3vXnAO9GjOv5mRb9GdfcHy.WBWfEB1JPkogefY.au', NULL, '181****7412', '2025-04-28 22:28:46', 'http://139.224.250.70:8000//storage/uploads/20250511/50115bb9529d0e310a4d2d553b9464d1.gif', '江宁区', '南京', NULL, NULL, NULL, NULL, NULL, NULL, '张三');
 INSERT INTO `users` VALUES (3, 'testuser03', '$2y$10$mHy1QBoveZtxjy6QgNId3egbxbCjQbq4iBOzso/3PnMiIAELL6Z3C', NULL, '12345678901', '2025-04-28 22:29:39', 'http://192.168.0.108:8000//storage/uploads/20250510/c8fa5734ad5b7067145341b72e0643d0.jpg', '福建闽南', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '小红');
 
 SET FOREIGN_KEY_CHECKS = 1;
