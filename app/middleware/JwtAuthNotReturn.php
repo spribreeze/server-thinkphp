@@ -16,7 +16,7 @@ class JwtAuthNotReturn
         $token = $request->header('token');
 
         if (!$token) {
-            // return Response::create(['code' => 401, 'msg' => '未提供 Token'], 'json')->code(401);
+            // return Response::create(['code' => 401, 'msg' => '请登录'], 'json')->code(401);
         	return $next($request);
         }
 

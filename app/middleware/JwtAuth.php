@@ -16,7 +16,7 @@ class JwtAuth
         $token = $request->header('token');
 
         if (!$token) {
-            return Response::create(['code' => 401, 'msg' => '未提供 Token'], 'json')->code(401);
+            return Response::create(['code' => 401, 'msg' => '请登录'], 'json')->code(201);
         }
 
         try {
@@ -25,7 +25,7 @@ class JwtAuth
 
             // ✅ 修改这里：正确从 data 中取出 user_id
             if (!isset($decoded->data->user_id)) {
-                return Response::create(['code' => 401, 'msg' => 'Token 数据不完整'], 'json')->code(401);
+                return Response::create(['code' => 401, 'msg' => 'Token 数据不完整'], 'json')->code(201);
             }
 
             // 将用户 ID 存入请求对象
@@ -35,7 +35,7 @@ class JwtAuth
             ];
 
         } catch (\Exception $e) {
-            return Response::create(['code' => 401, 'msg' => '无效的 Token'], 'json')->code(401);
+            return Response::create(['code' => 401, 'msg' => '无效的 Token'], 'json')->code(201);
         }
 
         return $next($request);
