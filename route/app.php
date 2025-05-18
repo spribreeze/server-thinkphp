@@ -23,15 +23,15 @@ Route::get('think', function () {
 Route::get('hello/:name', 'index/hello');
 
 // 用户注册接口
-Route::post('auth/register', 'Auth/register');
+Route::post('auth/register', 'Auth/register')->middleware([ReplaceLocalhost::class]);
 // 用户登录接口
-Route::post('auth/login', 'Auth/login');
+Route::post('auth/login', 'Auth/login')->middleware([ReplaceLocalhost::class]);
 // 更新用户信息
-Route::post('user/updateProfile', 'User/updateProfile')->middleware(JwtAuth::class);
+Route::post('user/updateProfile', 'User/updateProfile')->middleware([JwtAuth::class,ReplaceLocalhost::class]);
 // 修改密码接口（需登录）
-Route::post('auth/changePassword', 'Auth/changePassword')->middleware(JwtAuthNotReturn::class);
+Route::post('auth/changePassword', 'Auth/changePassword')->middleware([JwtAuthNotReturn::class,ReplaceLocalhost::class]);
 // 修改密码接口（无需登录）
-Route::post('auth/resetPasswordByAccount', 'Auth/resetPasswordByAccount');
+Route::post('auth/resetPasswordByAccount', 'Auth/resetPasswordByAccount')->middleware([ReplaceLocalhost::class]);
 
 // 商品列表分页接口
 Route::get('products/getList', 'Products/getList')->middleware([JwtAuthNotReturn::class,ReplaceLocalhost::class]);
