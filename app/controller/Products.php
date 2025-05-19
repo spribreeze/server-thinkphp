@@ -22,7 +22,7 @@ class Products
         $page = $request->param('page', 1); // 当前页码
         $limit = $request->param('limit', 10); // 每页条数
         $keyword = $request->param('keyword', ''); // 关键字搜索
-        $type = $request->param('type', ''); // 类型筛选
+        $column02 = $request->param('type', ''); // 类型筛选
 
         // 构建查询条件
         // $query = Product::order('id', 'desc'); // 默认排序
@@ -33,12 +33,14 @@ class Products
 
         // 如果提供了关键字，则按名称或描述模糊匹配
         if (!empty($keyword)) {
-            $query->where('name|description', 'like', '%' . $keyword . '%');
+            // $query->where('name|description', 'like', '%' . $keyword . '%');
+            $query->where('name', 'like', '%' . $keyword . '%');
         }
 
         // 如果提供了类型，则按类型精确匹配
-        if (!empty($type)) {
-            $query->where('type', '=', $type);
+        if (!empty($column02)) {
+            // $query->where('column02', '=', $column02);
+            $query->where('column02', 'like', '%' . $column02 . '%');
         }
 
         // 执行分页查询
