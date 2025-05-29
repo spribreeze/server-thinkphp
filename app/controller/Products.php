@@ -38,9 +38,14 @@ class Products
         }
 
         // 如果提供了类型，则按类型精确匹配
+        // if (!empty($column02)) {
+        //     // $query->where('column02', '=', $column02);
+        //     $query->where('column02', 'like', '%' . $column02 . '%');
+        // }
+        // 如果提供了类型，则按类型精确匹配
         if (!empty($column02)) {
             // $query->where('column02', '=', $column02);
-            $query->where('column02', 'like', '%' . $column02 . '%');
+            $query->where('type', 'like', '%' . $column02 . '%');
         }
 
         // 执行分页查询
